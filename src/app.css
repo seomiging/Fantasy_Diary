@@ -47,8 +47,8 @@ html, body, #root {
   justify-content: center;
   overflow: hidden;
 }
-.diary-bg.bg-home    { background-image: url('./assets/web_intro_bg.png'); }
-.diary-bg.bg-content { background-image: url('./assets/web_content_bg.png'); }
+.diary-bg.bg-home    { background-image: url('/assets/web_intro_bg.png'); }
+.diary-bg.bg-content { background-image: url('/assets/web_content_bg.png'); }
 
 /* ══ 컨테이너 ══ */
 .book-container {
@@ -112,7 +112,7 @@ html, body, #root {
   content: '';
   position: absolute;
   inset: 0;
-  background-image: url('./assets/cover1.png');
+  background-image: url('/assets/cover1.png');
   background-size: 100% 100%;
   border-radius: 6px;
   z-index: 0;
@@ -144,7 +144,7 @@ html, body, #root {
 .page-left .page-inner-left {
   position: absolute;
   top: 0; bottom: 0; left: 12px; right: -8px;
-  background-image: url('./assets/innerpage_left.png');
+  background-image: url('/assets/innerpage_left.png');
   background-size: 100% 100%;
   z-index: 1;
 }
@@ -166,7 +166,7 @@ html, body, #root {
 .page-right .page-inner-right {
   position: absolute;
   top: 0; bottom: 0; right: 12px; left: -8px;
-  background-image: url('./assets/innerpage_right.png');
+  background-image: url('/assets/innerpage_right.png');
   background-size: 100% 100%;
   z-index: 1;
   transform-origin: left center;
@@ -426,7 +426,7 @@ html, body, #root {
     content: '';
     position: absolute;
     inset: 0;
-    background-image: url('./assets/cover_mobile1.png');
+    background-image: url('/assets/cover_mobile1.png');
     background-size: 100% 100%;
     border-radius: 6px;
     z-index: 0;
@@ -464,7 +464,7 @@ html, body, #root {
   .port-inner {
     position: absolute;
     inset: 0;
-    background-image: url('./assets/innerpage_mobile.png');
+    background-image: url('/assets/innerpage_mobile.png');
     background-size: 100% 100%;
     z-index: 1;
   }
