@@ -1,20 +1,216 @@
-import React from 'react'
+import React, { useState, useEffect, useRef, useCallback } from 'react'
+import { Routes, Route, NavLink, useLocation, useNavigate } from 'react-router-dom'
+import './app.css'
 import Home from './home/Home'
+import About from './about/About'
 import Intro from './intro/Intro'
 import Profile from './profile/Profile'
 import Skills from './skills/Skills'
 import Project from './project/Project'
 import Contact from './contact/Contact'
+import AppMobile from './AppMobile'
 
-const App = () => {
+const NAV_ITEMS = [
+  { path: '/about',   label: 'About'   },
+  { path: '/profile', label: 'Profile' },
+  { path: '/skills',  label: 'Skills'  },
+  { path: '/project', label: 'Quest'   },
+  { path: '/contact', label: 'Contact' },
+]
+
+const PAGES = ['/', '/about', '/intro', '/profile', '/skills', '/project', '/project/2', '/project/3', '/contact']
+
+const App = () => (
+  <Routes>
+    <Route path="/"          element={<DiaryShell><Home /></DiaryShell>} />
+    <Route path="/about"     element={<DiaryShell><About /></DiaryShell>} />
+    <Route path="/intro"     element={<DiaryShell><Intro /></DiaryShell>} />
+    <Route path="/profile"   element={<DiaryShell><Profile /></DiaryShell>} />
+    <Route path="/skills"    element={<DiaryShell><Skills /></DiaryShell>} />
+    <Route path="/project"   element={<DiaryShell><Project projectNum={1} /></DiaryShell>} />
+    <Route path="/project/2" element={<DiaryShell><Project projectNum={2} /></DiaryShell>} />
+    <Route path="/project/3" element={<DiaryShell><Project projectNum={3} /></DiaryShell>} />
+    <Route path="/contact"   element={<DiaryShell><Contact /></DiaryShell>} />
+  </Routes>
+)
+
+const DiaryShell = ({ children }) => {
+  const location   = useLocation()
+  const navigate   = useNavigate()
+  const [phase,      setPhase]      = useState(null)
+  const [opening,    setOpening]    = useState(false)
+  const [closing,    setClosing]    = useState(false)
+  const [isOpen,     setIsOpen]     = useState(false)
+  const [isPortrait, setIsPortrait] = useState(false)
+  const [scale,      setScale]      = useState(1)
+  const busy = useRef(false)
+
+  const isHome    = location.pathname === '/'
+  const pageIndex = PAGES.indexOf(location.pathname)
+
+  // ── 반응형 감지 + scale 계산 ──
+  // 웹/가로 기준: book-open(1300x800) + prev버튼(68) + next버튼(68) + 탭(42) + 하단버튼(64) + 여백
+  const BASE_W = 1436
+  const BASE_H = 946
+  // portrait 기준: book(400x540) + 탭(36) + 여백
+  const PORT_W = 456   // 400(책) + 36(탭) + 10(우여백) + 10(좌여백)
+  const PORT_H = 720   // 540(책) + 50(위공간) + 54(아래버튼) + 76(상하여백)
+
+  useEffect(() => {
+    const check = () => {
+      const portrait = window.matchMedia('(max-width:1024px) and (orientation:portrait)').matches
+      setIsPortrait(portrait)
+      const vw = window.innerWidth
+      const vh = window.innerHeight
+      if (!portrait) {
+        // 웹 + 모바일 가로: 화면에 꽉 맞게 scale (최대 1)
+        const s = Math.min(vw / BASE_W, vh / BASE_H, 1)
+        setScale(s)
+      } else {
+        // portrait: 상하좌우 배경 살짝 보이게, 최대한 크게
+        const availH = vh - 100  // 상하 여백
+        const availW = vw - 60   // 좌우 여백
+        const s = Math.min(availW / PORT_W, availH / PORT_H)
+        setScale(s)
+      }
+    }
+    check()
+    window.addEventListener('resize', check)
+    window.addEventListener('orientationchange', check)
+    return () => {
+      window.removeEventListener('resize', check)
+      window.removeEventListener('orientationchange', check)
+    }
+  }, [])
+
+  const goTo = useCallback((path, dir) => {
+    if (busy.current) return
+    busy.current = true
+    setPhase(dir === 'next' ? 'exit-next' : 'exit-prev')
+    setTimeout(() => {
+      navigate(path)
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          setPhase(dir === 'next' ? 'enter-next' : 'enter-prev')
+          setTimeout(() => { setPhase(null); busy.current = false }, 400)
+        })
+      })
+    }, 320)
+  }, [navigate])
+
+  const scrollAccum = useRef(0)
+  const lastScroll  = useRef(0)
+  const handleWheel = useCallback((e) => {
+    if (isHome || busy.current) return
+    const now = Date.now()
+    if (now - lastScroll.current < 500) return
+    const d = e.deltaY > 0 ? 1 : -1
+    scrollAccum.current += d
+    if (Math.abs(scrollAccum.current) >= 2) {
+      scrollAccum.current = 0
+      lastScroll.current  = now
+      if (d > 0 && pageIndex < PAGES.length - 1) goTo(PAGES[pageIndex + 1], 'next')
+      if (d < 0 && pageIndex > 0)                goTo(PAGES[pageIndex - 1], 'prev')
+    }
+  }, [isHome, pageIndex, goTo])
+
+  useEffect(() => {
+    window.addEventListener('wheel', handleWheel, { passive: true })
+    return () => window.removeEventListener('wheel', handleWheel)
+  }, [handleWheel])
+
+  const openBook = () => {
+    if (opening) return
+    setOpening(true)
+    setTimeout(() => { setIsOpen(true); navigate('/about') }, 700)
+    setTimeout(() => setOpening(false), 1200)
+  }
+
+  const goHome = useCallback(() => {
+    if (closing) return
+    setClosing(true)
+    setTimeout(() => {
+      setIsOpen(false)
+      navigate('/')
+      setTimeout(() => setClosing(false), 100)
+    }, 420)
+  }, [closing, navigate])
+
+  useEffect(() => {
+    if (!isHome) setIsOpen(true)
+    else setIsOpen(false)
+  }, [isHome])
+
+  const rightCls = phase === 'exit-next'  ? ' flip-exit-right'
+                 : phase === 'enter-next' ? ' flip-enter-right' : ''
+  const leftCls  = phase === 'exit-prev'  ? ' flip-exit-left'
+                 : phase === 'enter-prev' ? ' flip-enter-left'  : ''
+
+  const clickRight = () => {
+    if (busy.current || pageIndex >= PAGES.length - 1) return
+    goTo(PAGES[pageIndex + 1], 'next')
+  }
+  const clickLeft = () => {
+    if (busy.current || pageIndex <= 0) return
+    goTo(PAGES[pageIndex - 1], 'prev')
+  }
+
   return (
-    <div>
-      <Home/>
-      <Intro/>
-      <Profile/>
-      <Skills/>
-      <Project/>
-      <Contact/>
+    <div className={`diary-bg${isHome ? ' bg-home' : ' bg-content'}${isPortrait ? ' bg-portrait' : ''}`}>
+      <div
+        className={`book-container${isPortrait ? ' book-container-portrait' : ''}`}
+        style={{ transform: `scale(${scale})`, transformOrigin: (isPortrait && window.innerWidth <= 480) ? 'top center' : 'center center' }}
+      >
+        {isHome ? (
+          <div className={`book-closed${opening ? ' book-opening' : ''}`} onClick={openBook}>
+            <picture>
+              <source media="(max-width:1024px) and (orientation:portrait)" srcSet="./assets/mobile_cover1.png" />
+              <img className="cover-img" src="./assets/web_cover1.png" alt="cover" />
+            </picture>
+            <span className="click-hint">click to start &nbsp;»</span>
+          </div>
+
+        ) : isPortrait ? (
+          <AppMobile>{children}</AppMobile>
+
+        ) : (
+          <div className={`book-open${closing ? ' book-closing' : isOpen ? ' book-opened' : ''}`}>
+            <div className="page-left" onClick={clickLeft}
+              style={{ cursor: pageIndex > 0 ? 'pointer' : 'default' }}>
+              <div className={`page-inner-left${leftCls}`} />
+              <span className="page-number">{pageIndex > 0 ? pageIndex * 2 - 1 : ''}</span>
+            </div>
+
+            <div className="page-right" onClick={clickRight}
+              style={{ cursor: pageIndex < PAGES.length - 1 ? 'pointer' : 'default' }}>
+              <div className={`page-inner-right${rightCls}`} />
+              <nav className="diary-nav" onClick={e => e.stopPropagation()}>
+                {NAV_ITEMS.map(item => (
+                  <NavLink key={item.path} to={item.path}
+                    className={({ isActive }) => `nav-item${isActive ? ' active' : ''}`}>
+                    {item.label}
+                  </NavLink>
+                ))}
+              </nav>
+              <div className="page-content" onClick={pageIndex < PAGES.length - 1 ? clickRight : undefined}>
+                {children}
+              </div>
+              <span className="page-number">{pageIndex * 2}</span>
+            </div>
+
+            <button className="close-btn" onClick={goHome} title="홈으로">✕</button>
+            {pageIndex > 0 && (
+              <button className="nav-btn prev" onClick={clickLeft}>❮</button>
+            )}
+            {pageIndex < PAGES.length - 1 && (
+              <button className="nav-btn next" onClick={clickRight}>❯</button>
+            )}
+            {pageIndex === PAGES.length - 1 && (
+              <button className="home-return-btn" onClick={goHome}>↩ 처음으로</button>
+            )}
+          </div>
+        )}
+      </div>
     </div>
   )
 }

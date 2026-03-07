@@ -1,0 +1,44 @@
+/* 속지 공통 스타일 */
+.page-inner {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Ridibatang', serif;
+  color: var(--ink);
+}
+
+.page-chapter {
+  font-family: 'NexonWarhaven', serif;
+  font-size: clamp(11px, 1.2vw, 13px);
+  letter-spacing: 0.4em;
+  color: var(--gold);
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
+.page-title {
+  font-family: 'HsBombaram30', serif;
+  font-size: clamp(28px, 4vw, 48px);
+  color: var(--crimson-dark);
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.page-divider {
+  width: 80px;
+  height: 2px;
+  background: linear-gradient(to right, transparent, var(--gold), transparent);
+  margin: 0 auto 24px;
+}
+
+.page-body {
+  font-family: 'Ridibatang', serif;
+  font-size: clamp(13px, 1.4vw, 15px);
+  line-height: 1.9;
+  color: rgba(28, 16, 8, 0.75);
+  text-align: center;
+  max-width: 420px;
+}

@@ -1,17 +1,9 @@
 import React from 'react'
-import "./home.css"
 
-const Home = () => {
-  return (
-    <div>
-      <div className='home_book'>
-        <img src='./home/web_cover.png'/>
-        <img src='./home/title_logo.png'/>
-        <img src='./home/name_logo.png'/>
-        <p className='click_msg'>click to open ▷</p>
-        </div>
-    </div>
-  )
+// Home 화면은 App.jsx의 DiaryShell에서 직접 처리합니다
+// (닫힌 책 UI)
+const Home = ({ onOpen }) => {
+  return null
 }
 
 export default Home

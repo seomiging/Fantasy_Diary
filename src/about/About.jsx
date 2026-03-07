@@ -1,12 +1,10 @@
 import React from 'react'
-import "./about.css"
 
-const About = () => {
+const About = ({ projectNum }) => {
   return (
-    <div>
-      
+    <div className="page-inner">
+      {/* 내용 추후 추가 */}
     </div>
   )
 }
-
 export default About
