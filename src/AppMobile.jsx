@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, useCallback } from 'react'
 import { NavLink, useLocation, useNavigate } from 'react-router-dom'
 
 const NAV_ITEMS = [
@@ -19,28 +19,32 @@ const MOBILE_PAGES = WEB_SPREADS.flatMap((path, i) => [
   { path, side: 'R', page: i * 2 + 2 },
 ])
 
-// 기준 크기는 App.jsx에서 통합 관리
-// book-portrait: 360x480 (CSS 기준)
-
-const AppMobile = ({ children }) => {
+const AppMobile = ({ children, isMobilePhone }) => {
   const location = useLocation()
   const navigate = useNavigate()
 
-  const [phase,   setPhase]   = useState(null)
-  const [isOpen,  setIsOpen]  = useState(false)
-  const [closing, setClosing] = useState(false)
-  const [step,    setStep]    = useState(0)
-  const busy = useRef(false)
+  const [phase,        setPhase]        = useState(null)
+  const [isOpen,       setIsOpen]       = useState(false)
+  const [closing,      setClosing]      = useState(false)
+  const [coverLeaving, setCoverLeaving] = useState(false)
+  const [step,         setStep]         = useState(0)
+
+  const busy      = useRef(false)
+  const stepRef   = useRef(0)       // wheel 핸들러용 최신 step
   const lastScroll = useRef(0)
+
+  // stepRef를 step과 동기화
+  useEffect(() => { stepRef.current = step }, [step])
 
   const isHome = location.pathname === '/'
 
   useEffect(() => {
     if (!isHome) setIsOpen(true)
-    else setIsOpen(false)
+    else { setIsOpen(false); setCoverLeaving(false) }
   }, [isHome])
 
-  const goHome = () => {
+  // 표지로 완전히 돌아가기
+  const goHome = useCallback(() => {
     if (closing) return
     setClosing(true)
     setTimeout(() => {
@@ -48,15 +52,43 @@ const AppMobile = ({ children }) => {
       navigate('/')
       setTimeout(() => setClosing(false), 100)
     }, 400)
-  }
+  }, [closing, navigate])
 
-  const goStep = (nextStep, dir) => {
+  // 첫 페이지로 돌아가기 - closing 애니 후 step 0으로 이동
+  const goFirstPage = useCallback(() => {
+    if (closing || busy.current) return
+    setClosing(true)
+    setTimeout(() => {
+      setClosing(false)
+      setIsOpen(false)
+      setTimeout(() => {
+        setStep(0)
+        navigate('/about')
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            setIsOpen(true)
+          })
+        })
+      }, 50)
+    }, 400)
+  }, [closing, navigate])
+
+  // 표지 탭 → 애니 후 콘텐츠 진입
+  const tapStart = useCallback(() => {
+    setCoverLeaving(true)
+    setTimeout(() => {
+      navigate('/about')
+      setStep(0)
+    }, 500)
+  }, [navigate])
+
+  const goStep = useCallback((nextStep, dir) => {
     if (busy.current) return
     busy.current = true
     setPhase(dir === 'next' ? 'exit-next' : 'exit-prev')
     setTimeout(() => {
       const target = MOBILE_PAGES[nextStep]
-      if (target.path !== location.pathname) navigate(target.path)
+      navigate(target.path)
       setStep(nextStep)
       requestAnimationFrame(() => {
         requestAnimationFrame(() => {
@@ -65,12 +97,17 @@ const AppMobile = ({ children }) => {
         })
       })
     }, 320)
-  }
+  }, [navigate])
 
-  const clickNext = () => { if (step < MOBILE_PAGES.length - 1) goStep(step + 1, 'next') }
-  const clickPrev = () => { if (step > 0) goStep(step - 1, 'prev') }
+  const clickNext = useCallback(() => {
+    if (stepRef.current < MOBILE_PAGES.length - 1) goStep(stepRef.current + 1, 'next')
+  }, [goStep])
 
-  // 휠 이벤트
+  const clickPrev = useCallback(() => {
+    if (stepRef.current > 0) goStep(stepRef.current - 1, 'prev')
+  }, [goStep])
+
+  // 휠 이벤트 - stepRef로 stale closure 방지
   useEffect(() => {
     const handleWheel = (e) => {
       if (busy.current) return
@@ -82,9 +119,12 @@ const AppMobile = ({ children }) => {
     }
     window.addEventListener('wheel', handleWheel, { passive: true })
     return () => window.removeEventListener('wheel', handleWheel)
-  }, [step])
+  }, [clickNext, clickPrev])
 
   const currentSide = MOBILE_PAGES[step]?.side ?? 'L'
+  const currentPage = MOBILE_PAGES[step]?.page ?? 1
+  const isLastPage  = step === MOBILE_PAGES.length - 1
+  const isFirstPage = step === 0
 
   const portCls = phase === 'exit-next'  ? ' port-exit-down'
                 : phase === 'exit-prev'  ? ' port-exit-up'
@@ -92,59 +132,105 @@ const AppMobile = ({ children }) => {
                 : phase === 'enter-prev' ? ' port-enter-down'
                 : ''
 
-  const currentPage = MOBILE_PAGES[step]?.page ?? 1
-
-  if (isHome) {
+  // ── 태블릿 portrait ──
+  if (!isMobilePhone) {
+    if (isHome) {
+      return (
+        <div className="book-closed" onClick={() => { navigate('/about'); setStep(0) }}>
+          <picture>
+            <img className="cover-img" src="./assets/mobile_cover1.png" alt="cover" />
+          </picture>
+          <span className="click-hint">click to start &nbsp;»</span>
+        </div>
+      )
+    }
     return (
-      <div className="book-closed"
-        onClick={() => { navigate('/about'); setStep(0) }}>
-        <picture>
-          <img className="cover-img" src="./assets/mobile_cover1.png" alt="cover" />
-        </picture>
-        <span className="click-hint">click to start &nbsp;»</span>
+      <div className={`book-open book-portrait${closing ? ' book-closing' : isOpen ? ' book-opened' : ''}`}>
+        <div className={`port-page port-page-${currentSide.toLowerCase()}`}>
+          <div className={`port-inner${portCls}`} />
+          <div className="page-content">{children}</div>
+          <div className="port-click-zone-top" onClick={clickPrev} />
+          <div className="port-click-zone" onClick={clickNext} />
+          <span className="page-number">{currentPage}</span>
+        </div>
+        <nav className="diary-nav">
+          {NAV_ITEMS.map(item => (
+            <NavLink key={item.path} to={item.path}
+              onClick={(e) => {
+                e.stopPropagation()
+                const idx = MOBILE_PAGES.findIndex(p => p.path === item.path)
+                if (idx >= 0) goStep(idx, idx > stepRef.current ? 'next' : 'prev')
+              }}
+              className={({ isActive }) => `nav-item${isActive ? ' active' : ''}`}>
+              {item.label}
+            </NavLink>
+          ))}
+        </nav>
+        <button className="close-btn" onClick={goHome} title="홈으로">✕</button>
+        {!isFirstPage && <button className="nav-btn prev" onClick={clickPrev}>︿</button>}
+        {!isLastPage  && <button className="nav-btn next" onClick={clickNext}>﹀</button>}
+        {isLastPage   && <button className="home-return-btn" onClick={goHome}>↩ 처음으로</button>}
       </div>
     )
   }
 
-  return (
-    <div className={`book-open book-portrait${closing ? ' book-closing' : isOpen ? ' book-opened' : ''}`}>
-
-      <div className={`port-page port-page-${currentSide.toLowerCase()}`}>
-        <div className={`port-inner${portCls}`} />
-        {/* 콘텐츠 영역 - 스크롤 가능 */}
-        <div className="page-content">
-          {children}
-        </div>
-        {/* 페이지 넘기기 클릭 영역 - 하단 20% */}
-        <div className="port-click-zone" onClick={clickNext} />
-        <span className="page-number">{currentPage}</span>
+  // ── 스마트폰: 표지 ──
+  if (isHome) {
+    return (
+      <div className={`mob-intro${coverLeaving ? ' mob-intro-leave' : ''}`} onClick={tapStart}>
+        <img src="./assets/mobile_intro_bg1.png" alt="cover" className="mob-intro-bg" />
+        <button className="mob-tap-btn" onClick={e => { e.stopPropagation(); tapStart() }}>
+          tap to start &nbsp;»
+        </button>
       </div>
+    )
+  }
 
-      <nav className="diary-nav">
+  // ── 스마트폰: 콘텐츠 ──
+  return (
+    <div className="mob-shell">
+
+      <header className="mob-header">
+        <img src="./assets/name_logo.png" alt="logo" className="mob-logo" onClick={goHome} />
+      </header>
+
+      <nav className="mob-nav">
         {NAV_ITEMS.map(item => (
           <NavLink key={item.path} to={item.path}
             onClick={(e) => {
-              e.stopPropagation()
+              e.preventDefault()
               const idx = MOBILE_PAGES.findIndex(p => p.path === item.path)
-              if (idx >= 0) goStep(idx, idx > step ? 'next' : 'prev')
+              if (idx >= 0) goStep(idx, idx > stepRef.current ? 'next' : 'prev')
             }}
-            className={({ isActive }) => `nav-item${isActive ? ' active' : ''}`}>
+            className={({ isActive }) => `mob-nav-item${isActive ? ' active' : ''}`}>
             {item.label}
           </NavLink>
         ))}
       </nav>
 
-      <button className="close-btn" onClick={goHome} title="홈으로">✕</button>
+      <div className="mob-book-wrap">
 
-      {step > 0 && (
-        <button className="nav-btn prev" onClick={clickPrev}>︿</button>
-      )}
-      {step < MOBILE_PAGES.length - 1 && (
-        <button className="nav-btn next" onClick={clickNext}>﹀</button>
-      )}
-      {step === MOBILE_PAGES.length - 1 && (
-        <button className="home-return-btn" onClick={goHome}>↩ 처음으로</button>
-      )}
+        {isFirstPage ? (
+          <button className="mob-goto-btn" onClick={goHome}>표지로 돌아가기</button>
+        ) : (
+          <button className="mob-arrow mob-arrow-prev" onClick={clickPrev}>︿</button>
+        )}
+
+        <div className={`mob-page${closing ? ' book-closing' : isOpen ? ' book-opened' : ''}`}>
+          <div className={`port-inner${portCls}`} />
+          <div className="mob-page-content">{children}</div>
+          <div className="port-click-zone-top" onClick={clickPrev} />
+          <div className="port-click-zone" onClick={clickNext} />
+          <span className="mob-page-number">{currentPage}</span>
+        </div>
+
+        {isLastPage ? (
+          <button className="mob-goto-btn" onClick={goFirstPage}>첫 페이지로 돌아가기</button>
+        ) : (
+          <button className="mob-arrow mob-arrow-next" onClick={clickNext}>﹀</button>
+        )}
+
+      </div>
     </div>
   )
 }

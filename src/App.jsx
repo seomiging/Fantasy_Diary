@@ -42,6 +42,7 @@ const DiaryShell = ({ children }) => {
   const [closing,    setClosing]    = useState(false)
   const [isOpen,     setIsOpen]     = useState(false)
   const [isPortrait, setIsPortrait] = useState(false)
+  const [isMobilePhone, setIsMobilePhone] = useState(false)
   const [scale,      setScale]      = useState(1)
   const busy = useRef(false)
 
@@ -59,17 +60,21 @@ const DiaryShell = ({ children }) => {
   useEffect(() => {
     const check = () => {
       const portrait = window.matchMedia('(max-width:1024px) and (orientation:portrait)').matches
+      const phone    = window.matchMedia('(max-width:480px) and (orientation:portrait)').matches
       setIsPortrait(portrait)
+      setIsMobilePhone(phone)
       const vw = window.innerWidth
       const vh = window.innerHeight
       if (!portrait) {
-        // 웹 + 모바일 가로: 화면에 꽉 맞게 scale (최대 1)
         const s = Math.min(vw / BASE_W, vh / BASE_H, 1)
         setScale(s)
+      } else if (phone) {
+        // 스마트폰: scale 없이 풀스크린 CSS로 처리
+        setScale(1)
       } else {
-        // portrait: 상하좌우 배경 살짝 보이게, 최대한 크게
-        const availH = vh - 100  // 상하 여백
-        const availW = vw - 60   // 좌우 여백
+        // 태블릿 portrait
+        const availH = vh - 100
+        const availW = vw - 60
         const s = Math.min(availW / PORT_W, availH / PORT_H)
         setScale(s)
       }
@@ -156,12 +161,16 @@ const DiaryShell = ({ children }) => {
   }
 
   return (
-    <div className={`diary-bg${isHome ? ' bg-home' : ' bg-content'}${isPortrait ? ' bg-portrait' : ''}`}>
+    <div className={`diary-bg${(isHome && !isMobilePhone) ? ' bg-home' : ''}${(!isHome) ? ' bg-content' : ''}${isPortrait ? ' bg-portrait' : ''}${isMobilePhone ? ' bg-phone' : ''}`}>
       <div
-        className={`book-container${isPortrait ? ' book-container-portrait' : ''}`}
-        style={{ transform: `scale(${scale})`, transformOrigin: (isPortrait && window.innerWidth <= 480) ? 'top center' : 'center center' }}
+        className={`book-container${isPortrait ? ' book-container-portrait' : ''}${isMobilePhone ? ' book-container-phone' : ''}`}
+        style={isMobilePhone ? undefined : { transform: `scale(${scale})`, transformOrigin: 'center center' }}
       >
-        {isHome ? (
+        {/* 스마트폰은 홈/콘텐츠 모두 AppMobile에서 처리 */}
+        {isMobilePhone ? (
+          <AppMobile isMobilePhone={true}>{children}</AppMobile>
+
+        ) : isHome ? (
           <div className={`book-closed${opening ? ' book-opening' : ''}`} onClick={openBook}>
             <picture>
               <source media="(max-width:1024px) and (orientation:portrait)" srcSet="./assets/mobile_cover1.png" />
@@ -171,18 +180,20 @@ const DiaryShell = ({ children }) => {
           </div>
 
         ) : isPortrait ? (
-          <AppMobile>{children}</AppMobile>
+          <AppMobile isMobilePhone={false}>{children}</AppMobile>
 
         ) : (
           <div className={`book-open${closing ? ' book-closing' : isOpen ? ' book-opened' : ''}`}>
             <div className="page-left" onClick={clickLeft}
               style={{ cursor: pageIndex > 0 ? 'pointer' : 'default' }}>
+              <div className="page-mat" />
               <div className={`page-inner-left${leftCls}`} />
               <span className="page-number">{pageIndex > 0 ? pageIndex * 2 - 1 : ''}</span>
             </div>
 
             <div className="page-right" onClick={clickRight}
               style={{ cursor: pageIndex < PAGES.length - 1 ? 'pointer' : 'default' }}>
+              <div className="page-mat" />
               <div className={`page-inner-right${rightCls}`} />
               <nav className="diary-nav" onClick={e => e.stopPropagation()}>
                 {NAV_ITEMS.map(item => (
@@ -206,7 +217,7 @@ const DiaryShell = ({ children }) => {
               <button className="nav-btn next" onClick={clickRight}>❯</button>
             )}
             {pageIndex === PAGES.length - 1 && (
-              <button className="home-return-btn" onClick={goHome}>↩ 처음으로</button>
+              <button className="home-return-btn" onClick={() => goTo(PAGES[1], 'prev')}>↩ 처음으로</button>
             )}
           </div>
         )}

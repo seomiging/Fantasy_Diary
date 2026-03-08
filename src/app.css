@@ -17,30 +17,55 @@
 }
 
 :root {
+  --crimson: #8B1A1A;
   --crimson-dark: #5C0F0F;
   --gold: #C9A84C;
   --gold-light: #E8C97A;
+  --parchment: #F5E6C8;
   --ink: #1C1008;
   --nav-h: 42px;
 }
 
+/* ══ 기본 리셋 ══ */
 html, body, #root {
+  margin: 0; padding: 0;
   width: 100%; height: 100%;
   overflow: hidden;
-  background: #1a0f07;
+  background: #2a1a0e;
 }
 
-/* ══ 커스텀 커서 - 전역 ══ */
+/* ══ 커스텀 커서 ══ */
 *, *::before, *::after {
   cursor: url('/pointer1.png') 0 100, auto !important;
 }
 
+/* ══ 공통 애니메이션 ══ */
+@keyframes blink-glow {
+  0%, 100% { opacity: 1; text-shadow: 0 0 8px rgba(232,201,122,0.9), 0 0 20px rgba(201,168,76,0.5); }
+  50%      { opacity: 0.2; text-shadow: none; }
+}
+@keyframes bookSpread {
+  from { opacity: 0; transform: scaleX(0.6) translateY(20px); }
+  to   { opacity: 1; transform: scaleX(1)   translateY(0); }
+}
+@keyframes bookClose {
+  from { opacity: 1; transform: scaleX(1)   translateY(0); }
+  to   { opacity: 0; transform: scaleX(0.6) translateY(20px); }
+}
+@keyframes bookSpreadPortrait {
+  from { opacity: 0; transform: scaleY(0.85) translateY(-8px); }
+  to   { opacity: 1; transform: scaleY(1)    translateY(0); }
+}
+@keyframes bookClosePortrait {
+  from { opacity: 1; transform: scaleY(1)    translateY(0); }
+  to   { opacity: 0; transform: scaleY(0.85) translateY(-8px); }
+}
+
 /* ══ 배경 ══ */
 .diary-bg {
-  width: 100vw;
-  height: 100vh;
+  width: 100vw; height: 100vh;
   background-size: cover;
-  background-position: center center;
+  background-position: center;
   background-repeat: no-repeat;
   display: flex;
   align-items: center;
@@ -59,12 +84,14 @@ html, body, #root {
   overflow: visible;
 }
 
-/* ══ 닫힌 표지 ══ */
+/* ══════════════════════════════════════════════
+   웹 / 가로 레이아웃
+══════════════════════════════════════════════ */
+
+/* ── 닫힌 표지 ── */
 .book-closed {
-  width: 650px;
-  height: 800px;
+  width: 650px; height: 800px;
   position: relative;
-  cursor: pointer;
   transform-style: preserve-3d;
   transition: transform 0.3s ease;
   filter: drop-shadow(0 30px 60px rgba(0,0,0,0.75));
@@ -86,8 +113,8 @@ html, body, #root {
 }
 .book-closed .click-hint {
   position: absolute;
-  bottom: 8%;
-  left: 56%; transform: translateX(-50%);
+  bottom: 8%; left: 56%;
+  transform: translateX(-50%);
   font-family: 'NexonWarhaven', serif;
   font-size: clamp(11px, 1.2vw, 14px);
   color: #e8c97a;
@@ -98,11 +125,10 @@ html, body, #root {
   text-shadow: 0 0 8px rgba(232,201,122,0.9), 0 0 20px rgba(201,168,76,0.5);
 }
 
-/* ══ 펼쳐진 책 (웹/가로) ══ */
+/* ── 펼쳐진 책 ── */
 .book-open {
   display: flex;
-  width: 1300px;
-  height: 800px;
+  width: 1300px; height: 800px;
   position: relative;
   filter: drop-shadow(0 30px 80px rgba(0,0,0,0.8));
   opacity: 0;
@@ -110,30 +136,17 @@ html, body, #root {
 }
 .book-open::before {
   content: '';
-  position: absolute;
-  inset: 0;
+  position: absolute; inset: 0;
   background-image: url('/assets/cover1.png');
   background-size: 100% 100%;
   border-radius: 6px;
   z-index: 0;
   pointer-events: none;
 }
-.book-open.book-opened {
-  animation: bookSpread 0.55s cubic-bezier(0.22,1,0.36,1) 0.1s forwards;
-}
-.book-open.book-closing {
-  animation: bookClose 0.45s cubic-bezier(0.4,0,0.8,0.2) forwards;
-}
-@keyframes bookSpread {
-  from { opacity: 0; transform: scaleX(0.6) translateY(20px); }
-  to   { opacity: 1; transform: scaleX(1)   translateY(0); }
-}
-@keyframes bookClose {
-  from { opacity: 1; transform: scaleX(1)   translateY(0); }
-  to   { opacity: 0; transform: scaleX(0.6) translateY(20px); }
-}
+.book-open.book-opened  { animation: bookSpread 0.55s cubic-bezier(0.22,1,0.36,1) 0.1s forwards; }
+.book-open.book-closing { animation: bookClose  0.45s cubic-bezier(0.4,0,0.8,0.2) forwards; }
 
-/* ══ 왼쪽 페이지 ══ */
+/* ── 왼쪽 페이지 ── */
 .page-left {
   width: 50%; height: 100%;
   position: relative;
@@ -141,6 +154,7 @@ html, body, #root {
   overflow: hidden;
   z-index: 1;
 }
+.page-left .page-mat { display: none; }
 .page-left .page-inner-left {
   position: absolute;
   top: 0; bottom: 0; left: 12px; right: -8px;
@@ -150,12 +164,12 @@ html, body, #root {
 }
 .page-left .page-number {
   position: absolute;
-  bottom: 22px;
-  left: 50%; transform: translateX(-50%);
+  bottom: 22px; left: 50%;
+  transform: translateX(-50%);
   z-index: 2;
 }
 
-/* ══ 오른쪽 페이지 ══ */
+/* ── 오른쪽 페이지 ── */
 .page-right {
   width: 50%; height: 100%;
   position: relative;
@@ -163,6 +177,7 @@ html, body, #root {
   overflow: visible;
   z-index: 1;
 }
+.page-right .page-mat { display: none; }
 .page-right .page-inner-right {
   position: absolute;
   top: 0; bottom: 0; right: 12px; left: -8px;
@@ -171,9 +186,16 @@ html, body, #root {
   z-index: 1;
   transform-origin: left center;
 }
-.page-content {
+.page-right .page-number {
   position: absolute;
-  inset: 0;
+  bottom: 22px; left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+}
+
+/* ── 페이지 콘텐츠 ── */
+.page-content {
+  position: absolute; inset: 0;
   z-index: 2;
   overflow-y: auto;
   padding: calc(var(--nav-h) + 16px) 44px 36px;
@@ -182,14 +204,8 @@ html, body, #root {
 }
 .page-content::-webkit-scrollbar { width: 6px; }
 .page-content::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 3px; }
-.page-right .page-number {
-  position: absolute;
-  bottom: 22px;
-  left: 50%; transform: translateX(-50%);
-  z-index: 3;
-}
 
-/* ══ 페이지 번호 공통 ══ */
+/* ── 페이지 번호 ── */
 .page-number {
   font-family: 'Ridibatang', serif;
   font-size: 16px;
@@ -199,7 +215,7 @@ html, body, #root {
   white-space: nowrap;
 }
 
-/* ══ 인덱스 탭 ══ */
+/* ── 인덱스 탭 (웹) ── */
 .page-right .diary-nav {
   position: absolute;
   top: calc(-1 * var(--nav-h));
@@ -218,8 +234,7 @@ html, body, #root {
   color: var(--ink);
   letter-spacing: 0.1em;
   text-decoration: none;
-  flex: 1;
-  height: 36px;
+  flex: 1; height: 36px;
   display: flex; align-items: center; justify-content: center;
   background: rgba(245,230,200,0.97);
   border: 1px solid rgba(180,140,80,0.45);
@@ -228,10 +243,7 @@ html, body, #root {
   box-shadow: 0 -2px 8px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.6);
   transition: all 0.18s;
 }
-.nav-item:hover {
-  color: var(--crimson-dark);
-  background: rgba(255,244,218,1);
-}
+.nav-item:hover { color: var(--crimson-dark); background: rgba(255,244,218,1); }
 .nav-item.active {
   color: var(--crimson-dark);
   background: rgba(255,248,228,1);
@@ -241,35 +253,35 @@ html, body, #root {
   box-shadow: 0 -3px 14px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.8);
 }
 
-/* ══ 페이지 넘기기 애니 ══ */
+/* ── 페이지 넘기기 애니 (웹) ── */
 .page-inner-right.flip-exit-right {
   animation: exitRight 0.32s cubic-bezier(0.4,0,1,0.6) forwards;
   transform-origin: left center; z-index: 5;
 }
-@keyframes exitRight {
-  0%   { transform: scaleX(1); filter: brightness(1); }
-  100% { transform: scaleX(0); filter: brightness(0.6); }
-}
 .page-inner-right.flip-enter-right {
   animation: enterRight 0.36s cubic-bezier(0,0.6,0.4,1) forwards;
   transform-origin: left center; z-index: 4;
+}
+.page-inner-left.flip-exit-left {
+  animation: exitLeft 0.32s cubic-bezier(0.4,0,1,0.6) forwards;
+  transform-origin: right center; z-index: 5;
+}
+.page-inner-left.flip-enter-left {
+  animation: enterLeft 0.36s cubic-bezier(0,0.6,0.4,1) forwards;
+  transform-origin: right center; z-index: 4;
+}
+@keyframes exitRight {
+  0%   { transform: scaleX(1); filter: brightness(1); }
+  100% { transform: scaleX(0); filter: brightness(0.6); }
 }
 @keyframes enterRight {
   0%   { transform: scaleX(0);     filter: brightness(0.6); }
   65%  { transform: scaleX(1.015); filter: brightness(0.98); }
   100% { transform: scaleX(1);     filter: brightness(1); }
 }
-.page-inner-left.flip-exit-left {
-  animation: exitLeft 0.32s cubic-bezier(0.4,0,1,0.6) forwards;
-  transform-origin: right center; z-index: 5;
-}
 @keyframes exitLeft {
   0%   { transform: scaleX(1); filter: brightness(1); }
   100% { transform: scaleX(0); filter: brightness(0.6); }
-}
-.page-inner-left.flip-enter-left {
-  animation: enterLeft 0.36s cubic-bezier(0,0.6,0.4,1) forwards;
-  transform-origin: right center; z-index: 4;
 }
 @keyframes enterLeft {
   0%   { transform: scaleX(0);     filter: brightness(0.6); }
@@ -277,7 +289,7 @@ html, body, #root {
   100% { transform: scaleX(1);     filter: brightness(1); }
 }
 
-/* ══ 이전/다음 버튼 ══ */
+/* ── 이전/다음 버튼 (웹) ── */
 .nav-btn {
   position: absolute;
   top: 50%; transform: translateY(-50%);
@@ -285,7 +297,6 @@ html, body, #root {
   color: var(--gold-light);
   font-size: 36px;
   width: 56px; height: 56px;
-  cursor: pointer;
   display: flex; align-items: center; justify-content: center;
   z-index: 100;
   transition: all 0.2s;
@@ -296,16 +307,15 @@ html, body, #root {
 .nav-btn.prev { left: -68px; }
 .nav-btn.next { right: -68px; }
 
-/* ══ X 닫기 버튼 ══ */
+/* ── X 닫기 버튼 ── */
 .close-btn {
   position: absolute;
-  top: -40px; right: -56px;
+  top: -38px; right: -48px;
   width: 34px; height: 34px;
   background: rgba(92,15,15,0.92);
   border: 1px solid var(--gold);
   color: var(--gold-light);
   font-size: 16px;
-  cursor: pointer;
   display: flex; align-items: center; justify-content: center;
   z-index: 200;
   transition: all 0.25s ease;
@@ -321,11 +331,11 @@ html, body, #root {
   border-color: var(--gold-light);
 }
 
-/* ══ 처음으로 버튼 ══ */
+/* ── 처음으로 버튼 (웹) ── */
 .home-return-btn {
   position: absolute;
-  bottom: -64px;
-  left: 50%; transform: translateX(-50%);
+  bottom: -64px; left: 50%;
+  transform: translateX(-50%);
   background: rgba(92,15,15,0.92);
   border: 1px solid var(--gold);
   color: var(--gold-light);
@@ -333,7 +343,6 @@ html, body, #root {
   font-size: 14px;
   letter-spacing: 0.2em;
   padding: 10px 28px;
-  cursor: pointer;
   z-index: 100;
   transition: all 0.25s ease;
   white-space: nowrap;
@@ -349,83 +358,57 @@ html, body, #root {
   letter-spacing: 0.28em;
 }
 
-/* ══ 공통 애니 ══ */
-@keyframes blink-glow {
-  0%,100% { opacity:1; text-shadow: 0 0 8px rgba(232,201,122,0.9), 0 0 20px rgba(201,168,76,0.5); }
-  50%     { opacity:0.2; text-shadow:none; }
-}
-
-/* ══════════════════════════════════════════════════════════
-   모바일 세로 (portrait ≤1024px)
-   App.jsx의 book-container에서 scale 통합 처리
-══════════════════════════════════════════════════════════ */
+/* ══════════════════════════════════════════════
+   태블릿 세로 (481px ~ 1024px portrait)
+══════════════════════════════════════════════ */
 .book-portrait { display: none !important; }
 
 @media (max-width: 1024px) and (orientation: portrait) {
 
-  /* 배경: 중앙 정렬, 상하좌우 배경 살짝 보이게 */
   .diary-bg.bg-portrait {
     align-items: center;
     justify-content: center;
-    padding-top: 0;
+    background-color: #2a1a0e;
   }
-
-  /* book-container portrait: 중앙 기준 */
   .book-container-portrait {
     align-items: center !important;
     justify-content: center !important;
   }
 
-  /* 가로형 숨기고 세로형만 */
+  /* 가로형 숨김 */
   .book-open:not(.book-portrait) { display: none !important; }
 
-  /* 표지 - 속지와 동일한 기준 크기 */
+  /* 표지 */
   .book-closed {
-    width: 400px;
-    height: 540px;
+    width: 400px; height: 540px;
     border-radius: 6px;
-    cursor: pointer;
     transform-origin: top center;
     filter: drop-shadow(0 16px 40px rgba(0,0,0,0.7));
   }
   .book-closed .cover-img { border-radius: 6px; width: 100%; height: 100%; object-fit: fill; }
-  .book-closed.book-opening { animation: bookOpenMobile 0.6s cubic-bezier(0.4,0,0.2,1) forwards; }
-  @keyframes bookOpenMobile {
+  .book-closed .click-hint { left: 54%; font-size: 11px; bottom: 7%; }
+  .book-closed.book-opening { animation: bookOpenTablet 0.6s cubic-bezier(0.4,0,0.2,1) forwards; }
+  @keyframes bookOpenTablet {
     0%   { transform: perspective(600px) rotateX(0deg);  opacity: 1; }
     40%  { transform: perspective(600px) rotateX(20deg); opacity: 0.9; }
     100% { transform: perspective(600px) rotateX(90deg); opacity: 0; }
   }
-  .book-closed .click-hint { left: 54%; font-size: 11px; bottom: 7%; }
 
-  /* 세로 다이어리 - CSS 기준 크기 (App.jsx scale이 전체 조정) */
+  /* 세로 다이어리 */
   .book-portrait {
     display: flex !important;
     flex-direction: column;
-    width: 400px;
-    height: 540px;
+    width: 400px; height: 540px;
     position: relative;
     filter: drop-shadow(0 16px 40px rgba(0,0,0,0.7));
     overflow: visible;
     opacity: 0;
   }
-  .book-portrait.book-opened {
-    animation: bookSpreadPortrait 0.5s cubic-bezier(0.22,1,0.36,1) 0.1s forwards;
-  }
-  .book-portrait.book-closing {
-    animation: bookClosePortrait 0.4s cubic-bezier(0.4,0,0.8,0.2) forwards;
-  }
-  @keyframes bookSpreadPortrait {
-    from { opacity: 0; transform: scaleY(0.85) translateY(-8px); }
-    to   { opacity: 1; transform: scaleY(1)    translateY(0); }
-  }
-  @keyframes bookClosePortrait {
-    from { opacity: 1; transform: scaleY(1)    translateY(0); }
-    to   { opacity: 0; transform: scaleY(0.85) translateY(-8px); }
-  }
+  .book-portrait.book-opened  { animation: bookSpreadPortrait 0.5s cubic-bezier(0.22,1,0.36,1) 0.1s forwards; }
+  .book-portrait.book-closing { animation: bookClosePortrait  0.4s cubic-bezier(0.4,0,0.8,0.2) forwards; }
   .book-portrait::before {
     content: '';
-    position: absolute;
-    inset: 0;
+    position: absolute; inset: 0;
     background-image: url('/assets/cover_mobile1.png');
     background-size: 100% 100%;
     border-radius: 6px;
@@ -441,29 +424,10 @@ html, body, #root {
     overflow: hidden;
     border-radius: 3px;
   }
-  /* L페이지: 우상단 모서리 살짝 접힘 */
-  .port-page-l::after {
-    content: '';
-    position: absolute;
-    top: 0; right: 0;
-    width: 18px; height: 18px;
-    background: linear-gradient(225deg, rgba(200,170,110,0.35) 50%, transparent 50%);
-    z-index: 5;
-    pointer-events: none;
-  }
-  /* R페이지: 좌상단 모서리 살짝 접힘 */
-  .port-page-r::after {
-    content: '';
-    position: absolute;
-    top: 0; left: 0;
-    width: 18px; height: 18px;
-    background: linear-gradient(315deg, rgba(200,170,110,0.35) 50%, transparent 50%);
-    z-index: 5;
-    pointer-events: none;
-  }
+  .port-page-l::after,
+  .port-page-r::after { display: none; }
   .port-inner {
-    position: absolute;
-    inset: 0;
+    position: absolute; inset: 0;
     background-image: url('/assets/innerpage_mobile.png');
     background-size: 100% 100%;
     z-index: 1;
@@ -472,57 +436,33 @@ html, body, #root {
     position: absolute; inset: 0; z-index: 3;
     overflow-y: auto; padding: 12px 14px 36px;
   }
-  /* 페이지 넘기기 클릭존 - 하단 15% */
+  .port-click-zone-top {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 15%; z-index: 4;
+  }
   .port-click-zone {
     position: absolute;
     bottom: 0; left: 0; right: 0;
-    height: 15%;
-    z-index: 4;
+    height: 15%; z-index: 4;
   }
   .port-page .page-number {
-    position: absolute; bottom: 12px;
-    left: 50%; transform: translateX(-50%);
+    position: absolute; bottom: 12px; left: 50%;
+    transform: translateX(-50%);
     z-index: 4; font-size: 13px;
   }
 
-  /* 페이지 넘기기 애니 - 슥~ 자연스럽게 */
-  /* 다음(▽): 위로 슬라이드 아웃 → 아래에서 슬라이드 인 */
-  .port-inner.port-exit-down {
-    animation: portExitDown 0.3s ease-in forwards;
-    z-index: 2;
-  }
-  .port-inner.port-enter-up {
-    animation: portEnterUp 0.35s ease-out forwards;
-    z-index: 1;
-  }
-  /* 이전(△): 아래로 슬라이드 아웃 → 위에서 슬라이드 인 */
-  .port-inner.port-exit-up {
-    animation: portExitUp 0.3s ease-in forwards;
-    z-index: 2;
-  }
-  .port-inner.port-enter-down {
-    animation: portEnterDown 0.35s ease-out forwards;
-    z-index: 1;
-  }
+  /* 속지 페이지 넘기기 애니 */
+  .port-inner.port-exit-down  { animation: portExitDown  0.3s  ease-in  forwards; z-index: 2; }
+  .port-inner.port-enter-up   { animation: portEnterUp   0.35s ease-out forwards; z-index: 1; }
+  .port-inner.port-exit-up    { animation: portExitUp    0.3s  ease-in  forwards; z-index: 2; }
+  .port-inner.port-enter-down { animation: portEnterDown 0.35s ease-out forwards; z-index: 1; }
+  @keyframes portExitDown  { 0% { transform: translateY(0);     opacity: 1;   } 100% { transform: translateY(-100%); opacity: 0.3; } }
+  @keyframes portEnterUp   { 0% { transform: translateY(100%);  opacity: 0.3; } 100% { transform: translateY(0);     opacity: 1;   } }
+  @keyframes portExitUp    { 0% { transform: translateY(0);     opacity: 1;   } 100% { transform: translateY(100%);  opacity: 0.3; } }
+  @keyframes portEnterDown { 0% { transform: translateY(-100%); opacity: 0.3; } 100% { transform: translateY(0);     opacity: 1;   } }
 
-  @keyframes portExitDown {
-    0%   { transform: translateY(0);     opacity: 1; }
-    100% { transform: translateY(-100%); opacity: 0.3; }
-  }
-  @keyframes portEnterUp {
-    0%   { transform: translateY(100%);  opacity: 0.3; }
-    100% { transform: translateY(0);     opacity: 1; }
-  }
-  @keyframes portExitUp {
-    0%   { transform: translateY(0);     opacity: 1; }
-    100% { transform: translateY(100%);  opacity: 0.3; }
-  }
-  @keyframes portEnterDown {
-    0%   { transform: translateY(-100%); opacity: 0.3; }
-    100% { transform: translateY(0);     opacity: 1; }
-  }
-
-  /* 위아래 버튼 - 가로형과 동일한 디자인 */
+  /* 위아래 버튼 */
   .book-portrait .nav-btn {
     position: absolute;
     left: 50%; transform: translateX(-50%);
@@ -530,35 +470,38 @@ html, body, #root {
     color: var(--gold-light);
     font-size: 36px;
     width: 56px; height: 56px;
-    cursor: pointer; z-index: 100;
+    z-index: 100;
     filter: drop-shadow(0 2px 8px rgba(0,0,0,0.7));
     display: flex; align-items: center; justify-content: center;
     transition: all 0.2s;
     line-height: 1;
   }
-  .book-portrait .nav-btn.prev { top: -52px; bottom: auto; transform: translateX(-50%); }
-  .book-portrait .nav-btn.next { bottom: -52px; top: auto; transform: translateX(-50%); }
-  .book-portrait .nav-btn.prev:hover { color: #fff; transform: translateX(-50%) scale(1.15); }
+  .book-portrait .nav-btn.prev { top: -52px; }
+  .book-portrait .nav-btn.next { bottom: -52px; top: auto; }
+  .book-portrait .nav-btn.prev:hover,
   .book-portrait .nav-btn.next:hover { color: #fff; transform: translateX(-50%) scale(1.15); }
 
-  /* X버튼: 인덱스 탭 위에, 오른쪽 벽에서 충분히 떨어지게 */
+  /* X 버튼 */
   .book-portrait .close-btn {
-    top: -36px;
-    right: -25px;
+    top: -36px; right: -25px;
     width: 26px; height: 26px; font-size: 11px;
   }
   .book-portrait .close-btn:hover {
     transform: scale(1.18);
     box-shadow: 0 0 14px rgba(201,168,76,0.7), 0 0 28px rgba(201,168,76,0.35);
   }
-  .book-portrait .home-return-btn { bottom: -54px; font-size: 11px; padding: 7px 18px; letter-spacing: 0.1em; }
+
+  /* 처음으로 버튼 */
+  .book-portrait .home-return-btn {
+    bottom: -54px; font-size: 11px; padding: 7px 18px; letter-spacing: 0.1em;
+  }
   .book-portrait .home-return-btn:hover {
     transform: translateX(-50%) translateY(-3px);
     box-shadow: 0 0 16px rgba(201,168,76,0.7), 0 6px 24px rgba(0,0,0,0.6);
     letter-spacing: 0.15em;
   }
 
-  /* 인덱스 탭 - 좁고 작게 */
+  /* 인덱스 탭 */
   .book-portrait .diary-nav {
     position: absolute;
     top: 0; bottom: 0;
@@ -572,6 +515,7 @@ html, body, #root {
     flex: 1; width: 36px;
     font-family: 'NexonWarhaven', serif;
     font-size: clamp(8px, 1.2vw, 11px);
+    font-weight: 600;
     letter-spacing: 0.08em;
     border-radius: 0 5px 5px 0;
     border: 1px solid rgba(180,140,80,0.45); border-left: none;
@@ -581,7 +525,6 @@ html, body, #root {
     box-shadow: 2px 2px 6px rgba(0,0,0,0.25);
     transition: all 0.18s;
     height: auto;
-    /* 오른쪽으로 누운 세로 글씨 */
     writing-mode: vertical-rl;
     text-orientation: mixed;
   }
@@ -595,22 +538,230 @@ html, body, #root {
   }
 }
 
-/* ══ 가로모드: JS scale 처리, 웹 레이아웃 그대로 사용 ══ */
+/* ══ 가로모드 ══ */
 @media (max-width: 1024px) and (orientation: landscape) {
   .book-open:not(.book-portrait) { display: flex !important; }
   .book-portrait { display: none !important; }
 }
 
-/* ══ 스마트폰(≤480px portrait): 상단 정렬, X버튼 안 잘리게 ══ */
+/* ══════════════════════════════════════════════
+   스마트폰 (≤480px portrait) - 풀스크린 앱 UI
+══════════════════════════════════════════════ */
 @media (max-width: 480px) and (orientation: portrait) {
-  .diary-bg.bg-portrait {
-    align-items: flex-start;
-    padding-top: 44px;
+
+  .diary-bg.bg-phone {
+    align-items: stretch;
+    justify-content: stretch;
+    padding: 0;
+    background-image: none !important;
+    background: #4a0f0f;
   }
-  .book-container-portrait {
-    align-items: flex-start !important;
+  .book-container-phone {
+    width: 100vw !important; height: 100vh !important;
+    transform: none !important;
+    display: block !important;
+    position: relative;
   }
-  /* 배경 아래+오른쪽으로 */
-  .diary-bg.bg-portrait.bg-home    { background-position: 65% 70%; }
-  .diary-bg.bg-portrait.bg-content { background-position: 65% 60%; }
+
+  /* ── 표지 화면 ── */
+  .mob-intro {
+    width: 100vw; height: 100vh;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    background: #4a0f0f;
+  }
+  .mob-intro-bg {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    object-position: center top;
+  }
+  .mob-intro-leave {
+    animation: mobIntroLeave 0.5s cubic-bezier(0.4,0,0.2,1) forwards;
+  }
+  @keyframes mobIntroLeave {
+    0%   { transform: translateY(0);     opacity: 1; }
+    100% { transform: translateY(-100%); opacity: 0; }
+  }
+  .mob-tap-btn {
+    position: absolute;
+    bottom: 12%; left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+    background: transparent;
+    border: 1px solid rgba(232,201,122,0.6);
+    border-radius: 20px;
+    color: #e8c97a;
+    font-family: 'NexonWarhaven', serif;
+    font-size: clamp(10px, 3vw, 14px);
+    letter-spacing: 0.3em;
+    padding: clamp(7px, 2vw, 11px) clamp(18px, 6vw, 28px);
+    white-space: nowrap;
+    animation: blink-glow 2.5s ease-in-out infinite;
+    text-shadow: 0 0 8px rgba(232,201,122,0.9);
+    box-shadow: 0 0 16px rgba(201,168,76,0.3);
+  }
+
+  /* ── 앱 쉘 ── */
+  .mob-shell {
+    width: 100vw; height: 100vh;
+    display: flex; flex-direction: column;
+    overflow: hidden;
+    background: #2f1e13;
+  }
+
+  /* ── 헤더 ── */
+  .mob-header {
+    width: 100%; height: 56px;
+    background-image: url('/assets/mobile_header.png');
+    background-size: cover;
+    background-position: center;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.6);
+    z-index: 50;
+  }
+  .mob-logo {
+    height: 36px; width: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 1px 4px rgba(0,0,0,0.5));
+  }
+
+  /* ── 네비게이션 ── */
+  .mob-nav {
+    width: 100%; height: 34px;
+    background: rgba(30,10,5,0.95);
+    border-bottom: 1px solid rgba(201,168,76,0.4);
+    display: flex; align-items: stretch;
+    flex-shrink: 0;
+    z-index: 40;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+  }
+  .mob-nav-item {
+    flex: 1;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'NexonWarhaven', serif;
+    font-size: 10px;
+    letter-spacing: 0.05em;
+    color: rgba(232,201,122,0.75);
+    text-decoration: none;
+    border-right: 1px solid rgba(201,168,76,0.2);
+    transition: all 0.18s;
+    position: relative;
+  }
+  .mob-nav-item:last-child { border-right: none; }
+  .mob-nav-item:hover { color: #fff; background: rgba(201,168,76,0.1); }
+  .mob-nav-item.active {
+    color: var(--gold-light);
+    font-weight: 700;
+    background: rgba(92,15,15,0.5);
+  }
+  .mob-nav-item.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 10%; right: 10%;
+    height: 2px;
+    background: var(--gold);
+    border-radius: 2px 2px 0 0;
+  }
+
+  /* ── 책 영역 (화살표 + 페이지) ── */
+  .mob-book-wrap {
+    flex: 1;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    overflow: hidden;
+    position: relative;
+    padding: 0 6px;
+    background: #312016;
+  }
+
+  /* ── 화살표 버튼 ── */
+  .mob-arrow {
+    background: none; border: none;
+    color: var(--gold-light);
+    font-size: 28px;
+    width: 100%; height: 36px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    filter: drop-shadow(0 2px 6px rgba(0,0,0,0.7));
+    transition: all 0.2s;
+    z-index: 10;
+  }
+  .mob-arrow:hover { color: #fff; }
+
+  /* ── 표지로/첫 페이지로 돌아가기 버튼 ── */
+  .mob-goto-btn {
+    width: 100%; height: 40px;
+    background: #3d1210;
+    border: none;
+    border-top: 1px solid rgba(201,168,76,0.35);
+    border-bottom: 1px solid rgba(201,168,76,0.35);
+    color: var(--gold-light);
+    font-family: 'NexonWarhaven', serif;
+    font-size: clamp(10px, 2.8vw, 13px);
+    letter-spacing: 0.12em;
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    gap: 4px;
+    transition: all 0.22s;
+  }
+  .mob-goto-btn:hover,
+  .mob-goto-btn:active {
+    background: rgba(139,26,26,0.98);
+    color: #fff;
+    letter-spacing: 0.18em;
+    box-shadow: 0 0 12px rgba(201,168,76,0.4);
+  }
+
+  /* ── 다이어리 페이지 ── */
+  .mob-page {
+    position: relative;
+    flex: 1; width: 100%;
+    overflow: visible;
+    opacity: 0;
+    border-radius: 6px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.6);
+  }
+  .mob-page.book-opened  { animation: bookSpreadPortrait 0.5s cubic-bezier(0.22,1,0.36,1) 0.1s forwards; }
+  .mob-page.book-closing { animation: bookClosePortrait  0.4s cubic-bezier(0.4,0,0.8,0.2) forwards; }
+  .mob-page .port-inner {
+    position: absolute; inset: 0;
+    background-image: url('/assets/innerpage_mobile.png');
+    background-size: 100% 100%;
+    z-index: 1; border-radius: 6px;
+  }
+  .mob-page-content {
+    position: absolute; inset: 0;
+    z-index: 3; overflow-y: auto;
+    padding: 16px 16px 40px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--gold) transparent;
+  }
+  .mob-page-content::-webkit-scrollbar { width: 4px; }
+  .mob-page-content::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 2px; }
+  .mob-page .port-click-zone-top {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 15%; z-index: 4;
+  }
+  .mob-page .port-click-zone {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 15%; z-index: 4;
+  }
+  .mob-page-number {
+    position: absolute;
+    bottom: 10px; left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Ridibatang', serif;
+    font-size: 12px;
+    color: var(--gold);
+    opacity: 0.8;
+    z-index: 4;
+    pointer-events: none;
+  }
 }
