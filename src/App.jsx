@@ -211,7 +211,11 @@ const DiaryShell = ({ children }) => {
     <div className={`diary-bg${(isHome && !isMobilePhone) ? ' bg-home' : ''}${(!isHome) ? ' bg-content' : ''}${isPortrait ? ' bg-portrait' : ''}${isMobilePhone ? ' bg-phone' : ''}`}>
       <div
         className={`book-container${isPortrait ? ' book-container-portrait' : ''}${isMobilePhone ? ' book-container-phone' : ''}`}
-        style={isMobilePhone ? undefined : { transform: `scale(${scale})`, transformOrigin: 'center center' }}
+        style={isMobilePhone ? undefined : {
+          position: 'absolute',
+          top: '50%', left: '50%',
+          transform: `translate(-50%, -50%) scale(${scale})`,
+        }}
       >
         {/* 스마트폰은 홈/콘텐츠 모두 AppMobile에서 처리 */}
         {isMobilePhone ? (
