@@ -230,7 +230,7 @@ html, body, #root {
 .nav-item {
   font-family: 'NexonWarhaven', serif;
   font-size: 13px;
-  font-weight: 400;
+  font-weight: 600;
   color: var(--ink);
   letter-spacing: 0.1em;
   text-decoration: none;
