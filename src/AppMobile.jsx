@@ -29,21 +29,20 @@ const AppMobile = ({ children, isMobilePhone }) => {
   const [coverLeaving, setCoverLeaving] = useState(false)
   const [step,         setStep]         = useState(0)
 
-  const busy      = useRef(false)
-  const stepRef   = useRef(0)       // wheel 핸들러용 최신 step
+  const busy       = useRef(false)
+  const stepRef    = useRef(0)
   const lastScroll = useRef(0)
 
-  // stepRef를 step과 동기화
+  // stepRef를 항상 최신 step으로 유지 (휠 핸들러 stale closure 방지)
   useEffect(() => { stepRef.current = step }, [step])
 
   const isHome = location.pathname === '/'
 
   useEffect(() => {
-    if (!isHome) setIsOpen(true)
-    else { setIsOpen(false); setCoverLeaving(false) }
+    if (isHome) { setIsOpen(false); setCoverLeaving(false) }
+    else        { setIsOpen(true) }
   }, [isHome])
 
-  // 표지로 완전히 돌아가기
   const goHome = useCallback(() => {
     if (closing) return
     setClosing(true)
@@ -54,7 +53,6 @@ const AppMobile = ({ children, isMobilePhone }) => {
     }, 400)
   }, [closing, navigate])
 
-  // 첫 페이지로 돌아가기 - closing 애니 후 step 0으로 이동
   const goFirstPage = useCallback(() => {
     if (closing || busy.current) return
     setClosing(true)
@@ -64,22 +62,14 @@ const AppMobile = ({ children, isMobilePhone }) => {
       setTimeout(() => {
         setStep(0)
         navigate('/about')
-        requestAnimationFrame(() => {
-          requestAnimationFrame(() => {
-            setIsOpen(true)
-          })
-        })
+        requestAnimationFrame(() => requestAnimationFrame(() => setIsOpen(true)))
       }, 50)
     }, 400)
   }, [closing, navigate])
 
-  // 표지 탭 → 애니 후 콘텐츠 진입
   const tapStart = useCallback(() => {
     setCoverLeaving(true)
-    setTimeout(() => {
-      navigate('/about')
-      setStep(0)
-    }, 500)
+    setTimeout(() => { navigate('/about'); setStep(0) }, 500)
   }, [navigate])
 
   const goStep = useCallback((nextStep, dir) => {
@@ -107,7 +97,6 @@ const AppMobile = ({ children, isMobilePhone }) => {
     if (stepRef.current > 0) goStep(stepRef.current - 1, 'prev')
   }, [goStep])
 
-  // 휠 이벤트 - stepRef로 stale closure 방지
   useEffect(() => {
     const handleWheel = (e) => {
       if (busy.current) return
@@ -115,7 +104,7 @@ const AppMobile = ({ children, isMobilePhone }) => {
       if (now - lastScroll.current < 600) return
       lastScroll.current = now
       if (e.deltaY > 0) clickNext()
-      else clickPrev()
+      else              clickPrev()
     }
     window.addEventListener('wheel', handleWheel, { passive: true })
     return () => window.removeEventListener('wheel', handleWheel)
@@ -132,6 +121,8 @@ const AppMobile = ({ children, isMobilePhone }) => {
                 : phase === 'enter-prev' ? ' port-enter-down'
                 : ''
 
+  const bookCls = closing ? ' book-closing' : isOpen ? ' book-opened' : ''
+
   // ── 태블릿 portrait ──
   if (!isMobilePhone) {
     if (isHome) {
@@ -145,7 +136,7 @@ const AppMobile = ({ children, isMobilePhone }) => {
       )
     }
     return (
-      <div className={`book-open book-portrait${closing ? ' book-closing' : isOpen ? ' book-opened' : ''}`}>
+      <div className={`book-open book-portrait${bookCls}`}>
         <div className={`port-page port-page-${currentSide.toLowerCase()}`}>
           <div className={`port-inner${portCls}`} />
           <div className="page-content">{children}</div>
@@ -216,7 +207,7 @@ const AppMobile = ({ children, isMobilePhone }) => {
           <button className="mob-arrow mob-arrow-prev" onClick={clickPrev}>︿</button>
         )}
 
-        <div className={`mob-page${closing ? ' book-closing' : isOpen ? ' book-opened' : ''}`}>
+        <div className={`mob-page${bookCls}`}>
           <div className={`port-inner${portCls}`} />
           <div className="mob-page-content">{children}</div>
           <div className="port-click-zone-top" onClick={clickPrev} />

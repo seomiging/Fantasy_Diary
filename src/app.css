@@ -35,14 +35,12 @@ html, body, #root {
 }
 
 /* ══ 커스텀 커서 ══ */
-*, *::before, *::after {
-  cursor: url('/pointer1.png') 0 100, auto !important;
-}
+* { cursor: url('/pointer1.png') 0 100, auto !important; }
 
 /* ══ 공통 애니메이션 ══ */
 @keyframes blink-glow {
   0%, 100% { opacity: 1; text-shadow: 0 0 8px rgba(232,201,122,0.9), 0 0 20px rgba(201,168,76,0.5); }
-  50%      { opacity: 0.2; text-shadow: none; }
+  50%       { opacity: 0.2; text-shadow: none; }
 }
 @keyframes bookSpread {
   from { opacity: 0; transform: scaleX(0.6) translateY(20px); }
@@ -272,8 +270,8 @@ html, body, #root {
   transform-origin: right center; z-index: 4;
 }
 @keyframes exitRight {
-  0%   { transform: scaleX(1); filter: brightness(1); }
-  100% { transform: scaleX(0); filter: brightness(0.6); }
+  0%   { transform: scaleX(1);     filter: brightness(1); }
+  100% { transform: scaleX(0);     filter: brightness(0.6); }
 }
 @keyframes enterRight {
   0%   { transform: scaleX(0);     filter: brightness(0.6); }
@@ -560,7 +558,9 @@ html, body, #root {
     background: #4a0f0f;
   }
   .book-container-phone {
-    width: 100vw !important; height: 100vh !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    height: 100dvh !important;
     transform: none !important;
     display: block !important;
     position: relative;
@@ -568,7 +568,9 @@ html, body, #root {
 
   /* ── 표지 화면 ── */
   .mob-intro {
-    width: 100vw; height: 100vh;
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
     position: relative;
     overflow: hidden;
     display: flex;
@@ -610,7 +612,9 @@ html, body, #root {
 
   /* ── 앱 쉘 ── */
   .mob-shell {
-    width: 100vw; height: 100vh;
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
     display: flex; flex-direction: column;
     overflow: hidden;
     background: #2f1e13;
@@ -676,14 +680,14 @@ html, body, #root {
     flex: 1;
     min-height: 0;
     display: flex; flex-direction: column;
-    align-items: center; justify-content: flex-start;
+    align-items: center; justify-content: center;
     overflow: hidden;
     position: relative;
     padding: 0 6px;
     background: #312016;
   }
 
-  /* ── 화살표 버튼 ── */
+  /* ── 화살표 / 이동 버튼 ── */
   .mob-arrow {
     background: none; border: none;
     color: var(--gold-light);
@@ -697,9 +701,8 @@ html, body, #root {
   }
   .mob-arrow:hover { color: #fff; }
 
-  /* ── 표지로/첫 페이지로 돌아가기 버튼 ── */
   .mob-goto-btn {
-    width: 100%; height: 40px;
+    width: 100%; height: 36px;
     background: #3d1210;
     border: none;
     border-top: 1px solid rgba(201,168,76,0.35);
@@ -750,16 +753,9 @@ html, body, #root {
   }
   .mob-page-content::-webkit-scrollbar { width: 4px; }
   .mob-page-content::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 2px; }
-  .mob-page .port-click-zone-top {
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 15%; z-index: 4;
-  }
-  .mob-page .port-click-zone {
-    position: absolute;
-    bottom: 0; left: 0; right: 0;
-    height: 15%; z-index: 4;
-  }
+  /* 스마트폰은 화살표 버튼으로 이동하므로 클릭존 불필요 */
+  .mob-page .port-click-zone-top,
+  .mob-page .port-click-zone { display: none; }
   .mob-page-number {
     position: absolute;
     bottom: 10px; left: 50%;
