@@ -93,9 +93,11 @@ const DiaryShell = ({ children }) => {
   useEffect(() => {
     // 사파리는 window.innerHeight가 주소창 포함이라 visualViewport 사용
     const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent)
-    const getVH = () => (isSafari && window.visualViewport)
-      ? window.visualViewport.height
-      : window.innerHeight
+    const getVH = () => {
+      if (isSafari && window.visualViewport) return window.visualViewport.height
+      // 그 외 브라우저: documentElement.clientHeight가 주소창 제외 실제 높이
+      return document.documentElement.clientHeight || window.innerHeight
+    }
 
     const check = () => {
       const portrait = window.matchMedia('(max-width:1024px) and (orientation:portrait)').matches
