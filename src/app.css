@@ -765,3 +765,19 @@ html, body, #root {
     pointer-events: none;
   }
 }
+
+/* ══════════════════════════════════════════════
+   사파리 전용 — dvh 지원 시 100vh 오버라이드
+   (주소창/툴바 포함 오버플로 버그 수정)
+══════════════════════════════════════════════ */
+@supports (height: 100dvh) {
+  /* 전체 배경 — 가로/세로 모두 중앙 정렬 보정 */
+  .diary-bg { height: 100dvh; }
+
+  /* 스마트폰 세로 — 풀스크린 높이 보정 */
+  @media (max-width: 480px) and (orientation: portrait) {
+    .book-container-phone { height: 100dvh !important; }
+    .mob-intro            { height: 100dvh; }
+    .mob-shell            { height: 100dvh; }
+  }
+}

@@ -91,13 +91,19 @@ const DiaryShell = ({ children }) => {
   const PORT_H = 720   // 540(책) + 50(위공간) + 54(아래버튼) + 76(상하여백)
 
   useEffect(() => {
+    // 사파리는 window.innerHeight가 주소창 포함이라 visualViewport 사용
+    const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent)
+    const getVH = () => (isSafari && window.visualViewport)
+      ? window.visualViewport.height
+      : window.innerHeight
+
     const check = () => {
       const portrait = window.matchMedia('(max-width:1024px) and (orientation:portrait)').matches
       const phone    = window.matchMedia('(max-width:480px) and (orientation:portrait)').matches
       setIsPortrait(portrait)
       setIsMobilePhone(phone)
       const vw = window.innerWidth
-      const vh = window.innerHeight
+      const vh = getVH()
       if (!portrait) {
         const s = Math.min(vw / BASE_W, vh / BASE_H, 1)
         setScale(s)
@@ -115,9 +121,15 @@ const DiaryShell = ({ children }) => {
     check()
     window.addEventListener('resize', check)
     window.addEventListener('orientationchange', check)
+    if (isSafari && window.visualViewport) {
+      window.visualViewport.addEventListener('resize', check)
+    }
     return () => {
       window.removeEventListener('resize', check)
       window.removeEventListener('orientationchange', check)
+      if (isSafari && window.visualViewport) {
+        window.visualViewport.removeEventListener('resize', check)
+      }
     }
   }, [])
 
