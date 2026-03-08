@@ -47,6 +47,39 @@ const DiaryShell = ({ children }) => {
   const [scale,         setScale]         = useState(1)
   const busy = useRef(false)
 
+  // ── 커서 동그라미 (잉크펜 끝 표시) ──
+  useEffect(() => {
+    const dot = document.createElement('div')
+    dot.id = 'cursor-dot'
+    Object.assign(dot.style, {
+      position:      'fixed',
+      width:         '10px',
+      height:        '10px',
+      borderRadius:  '50%',
+      background:    '#ffffff',
+      boxShadow:     '0 0 6px 2px rgba(255,255,255,0.8), 0 0 14px 4px rgba(255,255,255,0.35)',
+      pointerEvents: 'none',
+      zIndex:        '99999',
+      transform:     'translate(-50%, -50%)',
+      transition:    'opacity 0.2s',
+      opacity:       '0',
+    })
+    document.body.appendChild(dot)
+    const move = (e) => {
+      dot.style.left    = e.clientX + 'px'
+      dot.style.top     = e.clientY + 'px'
+      dot.style.opacity = '1'
+    }
+    const hide = () => { dot.style.opacity = '0' }
+    window.addEventListener('mousemove', move)
+    window.addEventListener('mouseleave', hide)
+    return () => {
+      window.removeEventListener('mousemove', move)
+      window.removeEventListener('mouseleave', hide)
+      dot.remove()
+    }
+  }, [])
+
   const isHome    = location.pathname === '/'
   const pageIndex = PAGES.indexOf(location.pathname)
 
