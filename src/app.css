@@ -35,14 +35,12 @@ html, body, #root {
 }
 
 /* ══ 커스텀 커서 ══ */
-*, *::before, *::after {
-  cursor: url('/pointer1.png') 0 100, auto !important;
-}
+* { cursor: url('/pointer1.png') 0 100, auto !important; }
 
 /* ══ 공통 애니메이션 ══ */
 @keyframes blink-glow {
   0%, 100% { opacity: 1; text-shadow: 0 0 8px rgba(232,201,122,0.9), 0 0 20px rgba(201,168,76,0.5); }
-  50%      { opacity: 0.2; text-shadow: none; }
+  50%       { opacity: 0.2; text-shadow: none; }
 }
 @keyframes bookSpread {
   from { opacity: 0; transform: scaleX(0.6) translateY(20px); }
@@ -199,6 +197,7 @@ html, body, #root {
   position: absolute; inset: 0;
   z-index: 2;
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
   padding: calc(var(--nav-h) + 16px) 44px 36px;
   scrollbar-width: thin;
   scrollbar-color: var(--gold) transparent;
@@ -272,8 +271,8 @@ html, body, #root {
   transform-origin: right center; z-index: 4;
 }
 @keyframes exitRight {
-  0%   { transform: scaleX(1); filter: brightness(1); }
-  100% { transform: scaleX(0); filter: brightness(0.6); }
+  0%   { transform: scaleX(1);     filter: brightness(1); }
+  100% { transform: scaleX(0);     filter: brightness(0.6); }
 }
 @keyframes enterRight {
   0%   { transform: scaleX(0);     filter: brightness(0.6); }
@@ -435,7 +434,9 @@ html, body, #root {
   }
   .port-page .page-content {
     position: absolute; inset: 0; z-index: 3;
-    overflow-y: auto; padding: 12px 14px 36px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 12px 14px 36px;
   }
   .port-click-zone-top {
     position: absolute;
@@ -672,6 +673,7 @@ html, body, #root {
   /* ── 책 영역 (화살표 + 페이지) ── */
   .mob-book-wrap {
     flex: 1;
+    min-height: 0;
     display: flex; flex-direction: column;
     align-items: center; justify-content: center;
     overflow: hidden;
@@ -680,7 +682,7 @@ html, body, #root {
     background: #312016;
   }
 
-  /* ── 화살표 버튼 ── */
+  /* ── 화살표 / 이동 버튼 ── */
   .mob-arrow {
     background: none; border: none;
     color: var(--gold-light);
@@ -694,9 +696,8 @@ html, body, #root {
   }
   .mob-arrow:hover { color: #fff; }
 
-  /* ── 표지로/첫 페이지로 돌아가기 버튼 ── */
   .mob-goto-btn {
-    width: 100%; height: 40px;
+    width: 100%; height: 36px;
     background: #3d1210;
     border: none;
     border-top: 1px solid rgba(201,168,76,0.35);
@@ -721,7 +722,9 @@ html, body, #root {
   /* ── 다이어리 페이지 ── */
   .mob-page {
     position: relative;
-    flex: 1; width: 100%;
+    flex: 1;
+    min-height: 0;
+    width: 100%;
     overflow: visible;
     opacity: 0;
     border-radius: 6px;
@@ -737,23 +740,17 @@ html, body, #root {
   }
   .mob-page-content {
     position: absolute; inset: 0;
-    z-index: 3; overflow-y: auto;
+    z-index: 3; overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
     padding: 16px 16px 40px;
     scrollbar-width: thin;
     scrollbar-color: var(--gold) transparent;
   }
   .mob-page-content::-webkit-scrollbar { width: 4px; }
   .mob-page-content::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 2px; }
-  .mob-page .port-click-zone-top {
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 15%; z-index: 4;
-  }
-  .mob-page .port-click-zone {
-    position: absolute;
-    bottom: 0; left: 0; right: 0;
-    height: 15%; z-index: 4;
-  }
+  /* 스마트폰은 화살표 버튼으로 이동하므로 클릭존 불필요 */
+  .mob-page .port-click-zone-top,
+  .mob-page .port-click-zone { display: none; }
   .mob-page-number {
     position: absolute;
     bottom: 10px; left: 50%;
@@ -772,7 +769,7 @@ html, body, #root {
    (주소창/툴바 포함 오버플로 버그 수정)
 ══════════════════════════════════════════════ */
 @supports (height: 100dvh) {
-  /* 전체 배경 — 가로/세로 모두 중앙 정렬 보정 */
+  /* 전체 배경 — 가로/세로 중앙 정렬 보정 */
   .diary-bg { height: 100dvh; }
 
   /* 스마트폰 세로 — 풀스크린 높이 보정 */

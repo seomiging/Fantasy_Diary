@@ -35,15 +35,15 @@ const App = () => (
 )
 
 const DiaryShell = ({ children }) => {
-  const location   = useLocation()
-  const navigate   = useNavigate()
-  const [phase,      setPhase]      = useState(null)
-  const [opening,    setOpening]    = useState(false)
-  const [closing,    setClosing]    = useState(false)
-  const [isOpen,     setIsOpen]     = useState(false)
-  const [isPortrait, setIsPortrait] = useState(false)
+  const location        = useLocation()
+  const navigate        = useNavigate()
+  const [phase,         setPhase]         = useState(null)
+  const [opening,       setOpening]       = useState(false)
+  const [closing,       setClosing]       = useState(false)
+  const [isOpen,        setIsOpen]        = useState(false)
+  const [isPortrait,    setIsPortrait]    = useState(false)
   const [isMobilePhone, setIsMobilePhone] = useState(false)
-  const [scale,      setScale]      = useState(1)
+  const [scale,         setScale]         = useState(1)
   const busy = useRef(false)
 
   const isHome    = location.pathname === '/'
@@ -83,19 +83,18 @@ const DiaryShell = ({ children }) => {
   }, [])
 
   // ── 반응형 감지 + scale 계산 ──
-  // 웹/가로 기준: book-open(1300x800) + prev버튼(68) + next버튼(68) + 탭(42) + 하단버튼(64) + 여백
+  // 웹/가로 기준: book-open(1300x800) + 좌우버튼(68*2) + 여백
   const BASE_W = 1436
   const BASE_H = 946
-  // portrait 기준: book(400x540) + 탭(36) + 여백
-  const PORT_W = 456   // 400(책) + 36(탭) + 10(우여백) + 10(좌여백)
-  const PORT_H = 720   // 540(책) + 50(위공간) + 54(아래버튼) + 76(상하여백)
+  // portrait 기준: book(400x540) + 탭(36+여백)
+  const PORT_W = 456
+  const PORT_H = 720
 
   useEffect(() => {
-    // 사파리는 window.innerHeight가 주소창 포함이라 visualViewport 사용
+    // 사파리는 innerHeight가 주소창 포함이라 visualViewport 사용
     const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent)
     const getVH = () => {
       if (isSafari && window.visualViewport) return window.visualViewport.height
-      // 그 외 브라우저: documentElement.clientHeight가 주소창 제외 실제 높이
       return document.documentElement.clientHeight || window.innerHeight
     }
 
@@ -107,17 +106,11 @@ const DiaryShell = ({ children }) => {
       const vw = window.innerWidth
       const vh = getVH()
       if (!portrait) {
-        const s = Math.min(vw / BASE_W, vh / BASE_H, 1)
-        setScale(s)
+        setScale(Math.min(vw / BASE_W, vh / BASE_H, 1))
       } else if (phone) {
-        // 스마트폰: scale 없이 풀스크린 CSS로 처리
         setScale(1)
       } else {
-        // 태블릿 portrait
-        const availH = vh - 100
-        const availW = vw - 60
-        const s = Math.min(availW / PORT_W, availH / PORT_H)
-        setScale(s)
+        setScale(Math.min((vw - 60) / PORT_W, (vh - 100) / PORT_H))
       }
     }
     check()
@@ -150,6 +143,7 @@ const DiaryShell = ({ children }) => {
     }, 320)
   }, [navigate])
 
+  // ── 마우스 휠로 페이지 이동 ──
   const scrollAccum = useRef(0)
   const lastScroll  = useRef(0)
   const handleWheel = useCallback((e) => {
@@ -190,7 +184,7 @@ const DiaryShell = ({ children }) => {
 
   useEffect(() => {
     if (!isHome) setIsOpen(true)
-    else setIsOpen(false)
+    else         setIsOpen(false)
   }, [isHome])
 
   const rightCls = phase === 'exit-next'  ? ' flip-exit-right'
@@ -199,25 +193,23 @@ const DiaryShell = ({ children }) => {
                  : phase === 'enter-prev' ? ' flip-enter-left'  : ''
 
   const clickRight = () => {
-    if (busy.current || pageIndex >= PAGES.length - 1) return
-    goTo(PAGES[pageIndex + 1], 'next')
+    if (!busy.current && pageIndex < PAGES.length - 1) goTo(PAGES[pageIndex + 1], 'next')
   }
   const clickLeft = () => {
-    if (busy.current || pageIndex <= 0) return
-    goTo(PAGES[pageIndex - 1], 'prev')
+    if (!busy.current && pageIndex > 0) goTo(PAGES[pageIndex - 1], 'prev')
   }
 
   return (
-    <div className={`diary-bg${(isHome && !isMobilePhone) ? ' bg-home' : ''}${(!isHome) ? ' bg-content' : ''}${isPortrait ? ' bg-portrait' : ''}${isMobilePhone ? ' bg-phone' : ''}`}>
+    <div className={`diary-bg${isHome && !isMobilePhone ? ' bg-home' : ''}${!isHome ? ' bg-content' : ''}${isPortrait ? ' bg-portrait' : ''}${isMobilePhone ? ' bg-phone' : ''}`}>
       <div
         className={`book-container${isPortrait ? ' book-container-portrait' : ''}${isMobilePhone ? ' book-container-phone' : ''}`}
         style={isMobilePhone ? undefined : {
-          position: 'absolute',
-          top: '50%', left: '50%',
+          position:  'absolute',
+          top:       '50%',
+          left:      '50%',
           transform: `translate(-50%, -50%) scale(${scale})`,
         }}
       >
-        {/* 스마트폰은 홈/콘텐츠 모두 AppMobile에서 처리 */}
         {isMobilePhone ? (
           <AppMobile isMobilePhone={true}>{children}</AppMobile>
 
