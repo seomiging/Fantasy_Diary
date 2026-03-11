@@ -1,11 +1,11 @@
 import React from 'react'
-import './profile.css'
+import './diary.css'
 
-const Profile = () => {
+const Diary = ({ pageNum = 1 }) => {
   return (
     <div className="page-inner">
     </div>
   )
 }
 
-export default Profile
+export default Diary

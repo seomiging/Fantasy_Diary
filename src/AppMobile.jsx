@@ -2,17 +2,11 @@ import React, { useState, useEffect, useRef, useCallback } from 'react'
 import { NavLink, useLocation, useNavigate } from 'react-router-dom'
 
 const NAV_ITEMS = [
-  { path: '/about',   label: 'About'   },
   { path: '/profile', label: 'Profile' },
-  { path: '/skills',  label: 'Skills'  },
-  { path: '/project', label: 'Quest'   },
-  { path: '/contact', label: 'Contact' },
+  { path: '/diary',   label: 'Diary'   },
 ]
 
-const WEB_SPREADS = [
-  '/about', '/intro', '/profile', '/skills',
-  '/project', '/project/2', '/project/3', '/contact'
-]
+const WEB_SPREADS = ['/profile', '/diary', '/diary/2', '/diary/3']
 
 const MOBILE_PAGES = WEB_SPREADS.flatMap((path, i) => [
   { path, side: 'L', page: i * 2 + 1 },
@@ -62,8 +56,8 @@ const AppMobile = ({ children, isMobilePhone }) => {
       setClosing(false)
       setIsOpen(false)
       setTimeout(() => {
-        setStep(0)
-        navigate('/about')
+        setStep(2)
+        navigate('/diary')
         requestAnimationFrame(() => {
           requestAnimationFrame(() => {
             setIsOpen(true)
@@ -77,7 +71,7 @@ const AppMobile = ({ children, isMobilePhone }) => {
   const tapStart = useCallback(() => {
     setCoverLeaving(true)
     setTimeout(() => {
-      navigate('/about')
+      navigate('/profile')
       setStep(0)
     }, 500)
   }, [navigate])
@@ -138,7 +132,7 @@ const AppMobile = ({ children, isMobilePhone }) => {
   if (!isMobilePhone) {
     if (isHome) {
       return (
-        <div className="book-closed" onClick={() => { navigate('/about'); setStep(0) }}>
+        <div className="book-closed" onClick={() => { navigate('/profile'); setStep(0) }}>
           <picture>
             <img className="cover-img" src="./assets/mobile_cover1.png" alt="cover" />
           </picture>

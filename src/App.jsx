@@ -1,36 +1,24 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react'
 import { Routes, Route, NavLink, useLocation, useNavigate } from 'react-router-dom'
 import './app.css'
-import Home from './home/Home'
-import About from './about/About'
-import Intro from './intro/Intro'
 import Profile from './profile/Profile'
-import Skills from './skills/Skills'
-import Project from './project/Project'
-import Contact from './contact/Contact'
+import Diary from './diary/Diary'
 import AppMobile from './AppMobile'
 
 const NAV_ITEMS = [
-  { path: '/about',   label: 'About'   },
   { path: '/profile', label: 'Profile' },
-  { path: '/skills',  label: 'Skills'  },
-  { path: '/project', label: 'Quest'   },
-  { path: '/contact', label: 'Contact' },
+  { path: '/diary',   label: 'Diary'   },
 ]
 
-const PAGES = ['/', '/about', '/intro', '/profile', '/skills', '/project', '/project/2', '/project/3', '/contact']
+const PAGES = ['/', '/profile', '/diary', '/diary/2', '/diary/3']
 
 const App = () => (
   <Routes>
-    <Route path="/"          element={<DiaryShell><Home /></DiaryShell>} />
-    <Route path="/about"     element={<DiaryShell><About /></DiaryShell>} />
-    <Route path="/intro"     element={<DiaryShell><Intro /></DiaryShell>} />
-    <Route path="/profile"   element={<DiaryShell><Profile /></DiaryShell>} />
-    <Route path="/skills"    element={<DiaryShell><Skills /></DiaryShell>} />
-    <Route path="/project"   element={<DiaryShell><Project projectNum={1} /></DiaryShell>} />
-    <Route path="/project/2" element={<DiaryShell><Project projectNum={2} /></DiaryShell>} />
-    <Route path="/project/3" element={<DiaryShell><Project projectNum={3} /></DiaryShell>} />
-    <Route path="/contact"   element={<DiaryShell><Contact /></DiaryShell>} />
+    <Route path="/"        element={<DiaryShell><div className="page-inner" /></DiaryShell>} />
+    <Route path="/profile" element={<DiaryShell><Profile /></DiaryShell>} />
+    <Route path="/diary"   element={<DiaryShell><Diary pageNum={1} /></DiaryShell>} />
+    <Route path="/diary/2" element={<DiaryShell><Diary pageNum={2} /></DiaryShell>} />
+    <Route path="/diary/3" element={<DiaryShell><Diary pageNum={3} /></DiaryShell>} />
   </Routes>
 )
 
@@ -168,7 +156,7 @@ const DiaryShell = ({ children }) => {
   const openBook = () => {
     if (opening) return
     setOpening(true)
-    setTimeout(() => { setIsOpen(true); navigate('/about') }, 700)
+    setTimeout(() => { setIsOpen(true); navigate('/profile') }, 700)
     setTimeout(() => setOpening(false), 1200)
   }
 
