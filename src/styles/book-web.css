@@ -1,0 +1,277 @@
+/* ════════════════════════════════════════
+   book-web.css  ·  웹 / 가로 레이아웃 전용
+   (1025px 이상 & 가로 모드)
+════════════════════════════════════════ */
+
+/* ── 닫힌 표지 ── */
+.book-closed {
+  width: 650px;
+  height: 800px;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.3s ease;
+  filter: drop-shadow(0 30px 60px rgba(0,0,0,0.75));
+  transform-origin: left center;
+}
+.book-closed:hover { transform: translateY(-6px) rotateY(-4deg); }
+.book-closed .cover-img {
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  display: block;
+  border-radius: 2px 10px 10px 2px;
+}
+.book-closed.book-opening {
+  animation: bookOpen 0.7s cubic-bezier(0.4,0,0.2,1) forwards;
+}
+.book-closed .click-hint {
+  position: absolute;
+  bottom: 8%;
+  left: 56%;
+  transform: translateX(-50%);
+  font-family: 'NexonWarhaven', serif;
+  font-size: clamp(11px, 1.2vw, 14px);
+  color: #e8c97a;
+  letter-spacing: 0.25em;
+  white-space: nowrap;
+  z-index: 10;
+  animation: blink-glow 2.5s ease-in-out infinite;
+  text-shadow: 0 0 8px rgba(232,201,122,0.9), 0 0 20px rgba(201,168,76,0.5);
+}
+
+/* ── 펼쳐진 책 ── */
+.book-open {
+  display: flex;
+  width: 1300px;
+  height: 800px;
+  position: relative;
+  filter: drop-shadow(0 30px 80px rgba(0,0,0,0.8));
+  opacity: 0;
+  transform: scaleX(0.6) translateY(20px);
+}
+.book-open::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url('/assets/cover1.png');
+  background-size: 100% 100%;
+  border-radius: 6px;
+  z-index: 0;
+  pointer-events: none;
+}
+.book-open.book-opened  { animation: bookSpread 0.55s cubic-bezier(0.22,1,0.36,1) 0.1s forwards; }
+.book-open.book-closing { animation: bookClose  0.45s cubic-bezier(0.4,0,0.8,0.2) forwards; }
+
+/* ── 왼쪽 페이지 ── */
+.page-left {
+  width: 50%;
+  height: 100%;
+  position: relative;
+  border-radius: 4px 0 0 4px;
+  overflow: hidden;
+  z-index: 1;
+}
+.page-left .page-mat { display: none; }
+.page-left .page-inner-left {
+  position: absolute;
+  top: 0; bottom: 0; left: 12px; right: -8px;
+  background-image: url('/assets/innerpage_left.png');
+  background-size: 100% 100%;
+  z-index: 1;
+}
+.page-left .page-number {
+  position: absolute;
+  bottom: 22px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+}
+
+/* ── 오른쪽 페이지 ── */
+.page-right {
+  width: 50%;
+  height: 100%;
+  position: relative;
+  border-radius: 0 4px 4px 0;
+  overflow: visible;
+  z-index: 1;
+}
+.page-right .page-mat { display: none; }
+.page-right .page-inner-right {
+  position: absolute;
+  top: 0; bottom: 0; right: 12px; left: -8px;
+  background-image: url('/assets/innerpage_right.png');
+  background-size: 100% 100%;
+  z-index: 1;
+  transform-origin: left center;
+}
+.page-right .page-number {
+  position: absolute;
+  bottom: 22px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+}
+
+/* ── 페이지 콘텐츠 ── */
+.page-content {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: calc(var(--nav-h) + 16px) 44px 36px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--gold) transparent;
+}
+.page-content::-webkit-scrollbar { width: 6px; }
+.page-content::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 3px; }
+
+/* ── 인덱스 탭 (웹) ── */
+.page-right .diary-nav {
+  position: absolute;
+  top: calc(-1 * var(--nav-h));
+  left: -10px;
+  right: 0;
+  height: var(--nav-h);
+  z-index: 10;
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+  padding: 0 8px;
+}
+.nav-item {
+  font-family: 'NexonWarhaven', serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+  letter-spacing: 0.1em;
+  text-decoration: none;
+  flex: 1;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(245,230,200,0.97);
+  border: 1px solid rgba(180,140,80,0.45);
+  border-bottom: none;
+  border-radius: 8px 8px 0 0;
+  box-shadow: 0 -2px 8px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.6);
+  transition: all 0.18s;
+}
+.nav-item:hover { color: var(--crimson-dark); background: rgba(255,244,218,1); }
+.nav-item.active {
+  color: var(--crimson-dark);
+  background: rgba(255,248,228,1);
+  border-color: rgba(180,140,80,0.6);
+  font-weight: 700;
+  height: 40px;
+  box-shadow: 0 -3px 14px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.8);
+}
+
+/* ── 페이지 넘기기 클래스 (웹) ── */
+.page-inner-right.flip-exit-right {
+  animation: exitRight 0.32s cubic-bezier(0.4,0,1,0.6) forwards;
+  transform-origin: left center;
+  z-index: 5;
+}
+.page-inner-right.flip-enter-right {
+  animation: enterRight 0.36s cubic-bezier(0,0.6,0.4,1) forwards;
+  transform-origin: left center;
+  z-index: 4;
+}
+.page-inner-left.flip-exit-left {
+  animation: exitLeft 0.32s cubic-bezier(0.4,0,1,0.6) forwards;
+  transform-origin: right center;
+  z-index: 5;
+}
+.page-inner-left.flip-enter-left {
+  animation: enterLeft 0.36s cubic-bezier(0,0.6,0.4,1) forwards;
+  transform-origin: right center;
+  z-index: 4;
+}
+
+/* ── 이전/다음 버튼 (웹) ── */
+.nav-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--gold-light);
+  font-size: 36px;
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  transition: all 0.2s;
+  filter: drop-shadow(0 2px 8px rgba(0,0,0,0.7));
+  line-height: 1;
+}
+.nav-btn:hover { color: #fff; transform: translateY(-50%) scale(1.15); }
+.nav-btn.prev  { left: -68px; }
+.nav-btn.next  { right: -68px; }
+
+/* ── X 닫기 버튼 ── */
+.close-btn {
+  position: absolute;
+  top: -38px;
+  right: -48px;
+  width: 34px;
+  height: 34px;
+  background: rgba(92,15,15,0.92);
+  border: 1px solid var(--gold);
+  color: var(--gold-light);
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+  transition: all 0.25s ease;
+  border-radius: 50%;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+  line-height: 1;
+}
+.close-btn:hover {
+  background: rgba(139,26,26,0.98);
+  color: #fff;
+  transform: scale(1.18);
+  box-shadow: 0 0 14px rgba(201,168,76,0.7), 0 0 28px rgba(201,168,76,0.35);
+  border-color: var(--gold-light);
+}
+
+/* ── 처음으로 버튼 (웹) ── */
+.home-return-btn {
+  position: absolute;
+  bottom: -64px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(92,15,15,0.92);
+  border: 1px solid var(--gold);
+  color: var(--gold-light);
+  font-family: 'NexonWarhaven', serif;
+  font-size: 14px;
+  letter-spacing: 0.2em;
+  padding: 10px 28px;
+  z-index: 100;
+  transition: all 0.25s ease;
+  white-space: nowrap;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.5);
+  border-radius: 20px;
+}
+.home-return-btn:hover {
+  background: rgba(139,26,26,0.98);
+  color: #fff;
+  transform: translateX(-50%) translateY(-3px);
+  box-shadow: 0 0 16px rgba(201,168,76,0.7), 0 6px 24px rgba(0,0,0,0.6);
+  border-color: var(--gold-light);
+  letter-spacing: 0.28em;
+}
+
+/* ── 가로 모드 강제 표시 ── */
+@media (max-width: 1024px) and (orientation: landscape) {
+  .book-open:not(.book-portrait) { display: flex !important; }
+  .book-portrait { display: none !important; }
+}

@@ -1,0 +1,260 @@
+/* ════════════════════════════════════════
+   book-mobile.css  ·  스마트폰 전용
+   (≤480px, orientation: portrait)
+════════════════════════════════════════ */
+
+@media (max-width: 480px) and (orientation: portrait) {
+
+  /* ── 배경 & 컨테이너 ── */
+  .diary-bg.bg-phone {
+    align-items: stretch;
+    justify-content: stretch;
+    padding: 0;
+    background-image: none !important;
+    background: #4a0f0f;
+  }
+  .book-container-phone {
+    width: 100vw !important;
+    height: 100vh !important;
+    transform: none !important;
+    display: block !important;
+    position: relative;
+  }
+
+  /* ── 표지 화면 ── */
+  .mob-intro {
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    background: #4a0f0f;
+  }
+  .mob-intro-bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+  }
+  .mob-intro-leave {
+    animation: mobIntroLeave 0.5s cubic-bezier(0.4,0,0.2,1) forwards;
+  }
+  .mob-tap-btn {
+    position: absolute;
+    bottom: 12%;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+    background: transparent;
+    border: 1px solid rgba(232,201,122,0.6);
+    border-radius: 20px;
+    color: #e8c97a;
+    font-family: 'NexonWarhaven', serif;
+    font-size: clamp(10px, 3vw, 14px);
+    letter-spacing: 0.3em;
+    padding: clamp(7px, 2vw, 11px) clamp(18px, 6vw, 28px);
+    white-space: nowrap;
+    animation: blink-glow 2.5s ease-in-out infinite;
+    text-shadow: 0 0 8px rgba(232,201,122,0.9);
+    box-shadow: 0 0 16px rgba(201,168,76,0.3);
+  }
+
+  /* ── 앱 쉘 ── */
+  .mob-shell {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background: #2f1e13;
+  }
+
+  /* ── 헤더 ── */
+  .mob-header {
+    width: 100%;
+    height: 56px;
+    background-image: url('/assets/mobile_header.png');
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.6);
+    z-index: 50;
+  }
+  .mob-logo {
+    height: 36px;
+    width: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 1px 4px rgba(0,0,0,0.5));
+  }
+
+  /* ── 네비게이션 ── */
+  .mob-nav {
+    width: 100%;
+    height: 34px;
+    background: rgba(30,10,5,0.95);
+    border-bottom: 1px solid rgba(201,168,76,0.4);
+    display: flex;
+    align-items: stretch;
+    flex-shrink: 0;
+    z-index: 40;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+  }
+  .mob-nav-item {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'NexonWarhaven', serif;
+    font-size: 10px;
+    letter-spacing: 0.05em;
+    color: rgba(232,201,122,0.75);
+    text-decoration: none;
+    border-right: 1px solid rgba(201,168,76,0.2);
+    transition: all 0.18s;
+    position: relative;
+  }
+  .mob-nav-item:last-child { border-right: none; }
+  .mob-nav-item:hover { color: #fff; background: rgba(201,168,76,0.1); }
+  .mob-nav-item.active {
+    color: var(--gold-light);
+    font-weight: 700;
+    background: rgba(92,15,15,0.5);
+  }
+  .mob-nav-item.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 10%;
+    right: 10%;
+    height: 2px;
+    background: var(--gold);
+    border-radius: 2px 2px 0 0;
+  }
+
+  /* ── 책 영역 (화살표 + 페이지) ── */
+  .mob-book-wrap {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+    padding: 0 6px;
+    background: #312016;
+  }
+
+  /* ── 화살표 버튼 ── */
+  .mob-arrow {
+    background: none;
+    border: none;
+    color: var(--gold-light);
+    font-size: 28px;
+    width: 100%;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    filter: drop-shadow(0 2px 6px rgba(0,0,0,0.7));
+    transition: all 0.2s;
+    z-index: 10;
+  }
+  .mob-arrow:hover { color: #fff; }
+
+  /* ── 이동 버튼 (표지/첫페이지) ── */
+  .mob-goto-btn {
+    width: 100%;
+    height: 36px;
+    background: #3d1210;
+    border: none;
+    border-top: 1px solid rgba(201,168,76,0.35);
+    border-bottom: 1px solid rgba(201,168,76,0.35);
+    color: var(--gold-light);
+    font-family: 'NexonWarhaven', serif;
+    font-size: clamp(10px, 2.8vw, 13px);
+    letter-spacing: 0.12em;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    transition: all 0.22s;
+  }
+  .mob-goto-btn:hover,
+  .mob-goto-btn:active {
+    background: rgba(139,26,26,0.98);
+    color: #fff;
+    letter-spacing: 0.18em;
+    box-shadow: 0 0 12px rgba(201,168,76,0.4);
+  }
+
+  /* ── 다이어리 페이지 ── */
+  .mob-page {
+    position: relative;
+    flex: 1;
+    min-height: 0;
+    width: 100%;
+    overflow: visible;
+    opacity: 0;
+    border-radius: 6px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.6);
+  }
+  .mob-page.book-opened  { animation: bookSpreadPortrait 0.5s cubic-bezier(0.22,1,0.36,1) 0.1s forwards; }
+  .mob-page.book-closing { animation: bookClosePortrait  0.4s cubic-bezier(0.4,0,0.8,0.2) forwards; }
+  .mob-page .port-inner {
+    position: absolute;
+    inset: 0;
+    background-image: url('/assets/innerpage_mobile.png');
+    background-size: 100% 100%;
+    z-index: 1;
+    border-radius: 6px;
+  }
+
+  /* ── 페이지 콘텐츠 ── */
+  .mob-page-content {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
+    padding: 16px 16px 40px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--gold) transparent;
+  }
+  .mob-page-content::-webkit-scrollbar { width: 4px; }
+  .mob-page-content::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 2px; }
+
+  /* 스마트폰은 화살표로 이동 → 클릭존 불필요 */
+  .mob-page .port-click-zone-top,
+  .mob-page .port-click-zone { display: none; }
+
+  /* ── 페이지 번호 ── */
+  .mob-page-number {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Ridibatang', serif;
+    font-size: 12px;
+    color: var(--gold);
+    opacity: 0.8;
+    z-index: 4;
+    pointer-events: none;
+  }
+
+  /* ── 사파리 dvh 보정 ── */
+  @supports (height: 100dvh) {
+    .book-container-phone { height: 100dvh !important; }
+    .mob-intro            { height: 100dvh; }
+    .mob-shell            { height: 100dvh; }
+  }
+}

@@ -1,0 +1,43 @@
+/* ════════════════════════════════════════
+   layout.css  ·  배경 & 공통 레이아웃
+════════════════════════════════════════ */
+
+/* ── 전체 배경 ── */
+.diary-bg {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.diary-bg.bg-home    { background-image: url('/assets/web_intro_bg.png'); }
+.diary-bg.bg-content { background-image: url('/assets/web_content_bg.png'); }
+
+/* ── 책 컨테이너 ── */
+.book-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+}
+
+/* ── 페이지 번호 (공통) ── */
+.page-number {
+  font-family: 'Ridibatang', serif;
+  font-size: 16px;
+  color: var(--gold);
+  opacity: 0.85;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+/* ── 사파리 dvh 보정 ── */
+@supports (height: 100dvh) {
+  .diary-bg { height: 100dvh; }
+}
