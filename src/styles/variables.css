@@ -10,13 +10,50 @@
 }
 
 :root {
-  /* 색상 */
+  /* ── 기본 팔레트 (테마1 기본값) ── */
   --crimson:      #8B1A1A;
   --crimson-dark: #5C0F0F;
   --gold:         #C9A84C;
   --gold-light:   #E8C97A;
   --parchment:    #F5E6C8;
   --ink:          #1C1008;
+
+  /* ── UI 컴포넌트 변수 (applyTheme에서 덮어씀) ── */
+
+  /* 배경 */
+  --bg-dark:          #2a1a0e;   /* body/html 배경 */
+  --mob-bg-shell:     #2f1e13;   /* 모바일 쉘 배경 */
+  --mob-bg-intro:     #4a0f0f;   /* 모바일 표지 배경 */
+  --mob-bg-book-wrap: #312016;   /* 모바일 책 영역 배경 */
+  --mob-bg-goto:      #3d1210;   /* 돌아가기 버튼 배경 */
+  --mob-bg-goto-hover:#8B1A1A;   /* 돌아가기 버튼 hover */
+
+  /* X·처음으로 버튼 */
+  --btn-bg:           rgba(92,15,15,0.92);
+  --btn-bg-hover:     rgba(139,26,26,0.98);
+  --btn-border:       var(--gold);
+  --btn-shadow:       rgba(201,168,76,0.7);
+  --btn-shadow2:      rgba(201,168,76,0.35);
+
+  /* 인덱스 탭 */
+  --tab-bg:           rgba(245,230,200,0.97);
+  --tab-bg-hover:     rgba(255,244,218,1);
+  --tab-bg-active:    rgba(255,248,228,1);
+  --tab-border:       rgba(180,140,80,0.45);
+  --tab-border-active:rgba(180,140,80,0.6);
+
+  /* 모바일 네비 */
+  --mob-nav-bg:       rgba(30,10,5,0.95);
+  --mob-nav-border:   rgba(201,168,76,0.4);
+  --mob-nav-color:    rgba(232,201,122,0.75);
+  --mob-nav-divider:  rgba(201,168,76,0.2);
+  --mob-nav-active-bg:rgba(92,15,15,0.5);
+
+  /* tap to start / click hint */
+  --hint-color:       #e8c97a;
+  --hint-border:      rgba(232,201,122,0.6);
+  --hint-shadow:      rgba(201,168,76,0.3);
+  --hint-text-shadow: rgba(232,201,122,0.9);
 
   /* 레이아웃 */
   --nav-h: 42px;
@@ -28,8 +65,8 @@ html, body, #root {
   width: 100%;
   height: 100%;
   overflow: hidden;
-  background: #2a1a0e;
+  background: var(--bg-dark);
 }
 
 /* 커스텀 커서 */
-* { cursor: url('/pointer1.png') 0 100, auto !important; }
+* { cursor: url('/assets/cursor/pointer1.png') 0 100, auto !important; }

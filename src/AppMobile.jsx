@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react'
 import { NavLink, useLocation, useNavigate } from 'react-router-dom'
+import ThemeSelector from './theme/ThemeSelector'
+import { useTheme } from './theme/ThemeContext'
 
 const NAV_ITEMS = [
   { path: '/profile', label: 'Profile' },
@@ -23,6 +25,7 @@ const AppMobile = ({ children, isMobilePhone }) => {
   const [coverLeaving, setCoverLeaving] = useState(false)
   const [step,         setStep]         = useState(0)
 
+  const { currentTheme } = useTheme()
   const busy       = useRef(false)
   const stepRef    = useRef(0)       // wheel 핸들러용 최신 step
   const lastScroll = useRef(0)
@@ -134,7 +137,7 @@ const AppMobile = ({ children, isMobilePhone }) => {
       return (
         <div className="book-closed" onClick={() => { navigate('/profile'); setStep(0) }}>
           <picture>
-            <img className="cover-img" src="./assets/mobile_cover1.png" alt="cover" />
+            <img className="cover-img" src={currentTheme.assets.mobileCover} alt="cover" />
           </picture>
           <span className="click-hint">click to start &nbsp;»</span>
         </div>
@@ -174,7 +177,8 @@ const AppMobile = ({ children, isMobilePhone }) => {
   if (isHome) {
     return (
       <div className={`mob-intro${coverLeaving ? ' mob-intro-leave' : ''}`} onClick={tapStart}>
-        <img src="./assets/mobile_intro_bg1.png" alt="cover" className="mob-intro-bg" />
+        <img src={currentTheme.assets.mobileIntroBg} alt="cover" className="mob-intro-bg" />
+        <ThemeSelector isMobilePhone={true} />
         <button className="mob-tap-btn" onClick={e => { e.stopPropagation(); tapStart() }}>
           tap to start &nbsp;»
         </button>
@@ -186,8 +190,10 @@ const AppMobile = ({ children, isMobilePhone }) => {
   return (
     <div className="mob-shell">
 
-      <header className="mob-header">
-        <img src="./assets/name_logo.png" alt="logo" className="mob-logo" onClick={goHome} />
+      <header className="mob-header"
+        style={{ backgroundImage: `url('${currentTheme.assets.mobileHeader}')` }}
+      >
+        <img src={currentTheme.assets.nameLogo} alt="logo" className="mob-logo" onClick={goHome} />
       </header>
 
       <nav className="mob-nav">

@@ -13,10 +13,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
+  overflow: visible;
 }
-.diary-bg.bg-home    { background-image: url('/assets/web_intro_bg.png'); }
-.diary-bg.bg-content { background-image: url('/assets/web_content_bg.png'); }
+.diary-bg.bg-home    { background-image: url('/assets/theme1/web_intro_bg.png'); }
+.diary-bg.bg-content { background-image: url('/assets/theme1/web_content_bg.png'); }
 
 /* ── 책 컨테이너 ── */
 .book-container {

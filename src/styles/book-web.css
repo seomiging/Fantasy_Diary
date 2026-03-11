@@ -1,6 +1,5 @@
 /* ════════════════════════════════════════
    book-web.css  ·  웹 / 가로 레이아웃 전용
-   (1025px 이상 & 가로 모드)
 ════════════════════════════════════════ */
 
 /* ── 닫힌 표지 ── */
@@ -31,12 +30,12 @@
   transform: translateX(-50%);
   font-family: 'NexonWarhaven', serif;
   font-size: clamp(11px, 1.2vw, 14px);
-  color: #e8c97a;
+  color: var(--hint-color);
   letter-spacing: 0.25em;
   white-space: nowrap;
   z-index: 10;
   animation: blink-glow 2.5s ease-in-out infinite;
-  text-shadow: 0 0 8px rgba(232,201,122,0.9), 0 0 20px rgba(201,168,76,0.5);
+  text-shadow: 0 0 8px var(--hint-text-shadow), 0 0 20px var(--hint-shadow);
 }
 
 /* ── 펼쳐진 책 ── */
@@ -53,7 +52,6 @@
   content: '';
   position: absolute;
   inset: 0;
-  background-image: url('/assets/cover1.png');
   background-size: 100% 100%;
   border-radius: 6px;
   z-index: 0;
@@ -75,7 +73,6 @@
 .page-left .page-inner-left {
   position: absolute;
   top: 0; bottom: 0; left: 12px; right: -8px;
-  background-image: url('/assets/innerpage_left.png');
   background-size: 100% 100%;
   z-index: 1;
 }
@@ -100,7 +97,6 @@
 .page-right .page-inner-right {
   position: absolute;
   top: 0; bottom: 0; right: 12px; left: -8px;
-  background-image: url('/assets/innerpage_right.png');
   background-size: 100% 100%;
   z-index: 1;
   transform-origin: left center;
@@ -152,24 +148,24 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(245,230,200,0.97);
-  border: 1px solid rgba(180,140,80,0.45);
+  background: var(--tab-bg);
+  border: 1px solid var(--tab-border);
   border-bottom: none;
   border-radius: 8px 8px 0 0;
   box-shadow: 0 -2px 8px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.6);
   transition: all 0.18s;
 }
-.nav-item:hover { color: var(--crimson-dark); background: rgba(255,244,218,1); }
+.nav-item:hover { color: var(--crimson-dark); background: var(--tab-bg-hover); }
 .nav-item.active {
   color: var(--crimson-dark);
-  background: rgba(255,248,228,1);
-  border-color: rgba(180,140,80,0.6);
+  background: var(--tab-bg-active);
+  border-color: var(--tab-border-active);
   font-weight: 700;
   height: 40px;
   box-shadow: 0 -3px 14px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.8);
 }
 
-/* ── 페이지 넘기기 클래스 (웹) ── */
+/* ── 페이지 넘기기 클래스 ── */
 .page-inner-right.flip-exit-right {
   animation: exitRight 0.32s cubic-bezier(0.4,0,1,0.6) forwards;
   transform-origin: left center;
@@ -191,7 +187,7 @@
   z-index: 4;
 }
 
-/* ── 이전/다음 버튼 (웹) ── */
+/* ── 이전/다음 버튼 ── */
 .nav-btn {
   position: absolute;
   top: 50%;
@@ -221,8 +217,8 @@
   right: -48px;
   width: 34px;
   height: 34px;
-  background: rgba(92,15,15,0.92);
-  border: 1px solid var(--gold);
+  background: var(--btn-bg);
+  border: 1px solid var(--btn-border);
   color: var(--gold-light);
   font-size: 16px;
   display: flex;
@@ -235,21 +231,21 @@
   line-height: 1;
 }
 .close-btn:hover {
-  background: rgba(139,26,26,0.98);
+  background: var(--btn-bg-hover);
   color: #fff;
   transform: scale(1.18);
-  box-shadow: 0 0 14px rgba(201,168,76,0.7), 0 0 28px rgba(201,168,76,0.35);
+  box-shadow: 0 0 14px var(--btn-shadow), 0 0 28px var(--btn-shadow2);
   border-color: var(--gold-light);
 }
 
-/* ── 처음으로 버튼 (웹) ── */
+/* ── 처음으로 버튼 ── */
 .home-return-btn {
   position: absolute;
   bottom: -64px;
   left: 50%;
   transform: translateX(-50%);
-  background: rgba(92,15,15,0.92);
-  border: 1px solid var(--gold);
+  background: var(--btn-bg);
+  border: 1px solid var(--btn-border);
   color: var(--gold-light);
   font-family: 'NexonWarhaven', serif;
   font-size: 14px;
@@ -262,10 +258,10 @@
   border-radius: 20px;
 }
 .home-return-btn:hover {
-  background: rgba(139,26,26,0.98);
+  background: var(--btn-bg-hover);
   color: #fff;
   transform: translateX(-50%) translateY(-3px);
-  box-shadow: 0 0 16px rgba(201,168,76,0.7), 0 6px 24px rgba(0,0,0,0.6);
+  box-shadow: 0 0 16px var(--btn-shadow), 0 6px 24px rgba(0,0,0,0.6);
   border-color: var(--gold-light);
   letter-spacing: 0.28em;
 }

@@ -4,6 +4,8 @@ import './app.css'
 import Profile from './profile/Profile'
 import Diary from './diary/Diary'
 import AppMobile from './AppMobile'
+import ThemeSelector from './theme/ThemeSelector'
+import { useTheme } from './theme/ThemeContext'
 
 const NAV_ITEMS = [
   { path: '/profile', label: 'Profile' },
@@ -32,6 +34,7 @@ const DiaryShell = ({ children }) => {
   const [isPortrait,    setIsPortrait]    = useState(false)
   const [isMobilePhone, setIsMobilePhone] = useState(false)
   const [scale,         setScale]         = useState(1)
+  const { currentTheme } = useTheme()
   const busy = useRef(false)
 
   const isHome    = location.pathname === '/'
@@ -198,14 +201,15 @@ const DiaryShell = ({ children }) => {
           transform: `translate(-50%, -50%) scale(${scale})`,
         }}
       >
-        {isMobilePhone ? (
+        {!isMobilePhone && <ThemeSelector isMobilePhone={false} />}
+      {isMobilePhone ? (
           <AppMobile isMobilePhone={true}>{children}</AppMobile>
 
         ) : isHome ? (
           <div className={`book-closed${opening ? ' book-opening' : ''}`} onClick={openBook}>
             <picture>
-              <source media="(max-width:1024px) and (orientation:portrait)" srcSet="./assets/mobile_cover1.png" />
-              <img className="cover-img" src="./assets/web_cover1.png" alt="cover" />
+              <source media="(max-width:1024px) and (orientation:portrait)" srcSet={currentTheme.assets.mobileCover} />
+              <img className="cover-img" src={currentTheme.assets.webClosedCover} alt="cover" />
             </picture>
             <span className="click-hint">click to start &nbsp;»</span>
           </div>
