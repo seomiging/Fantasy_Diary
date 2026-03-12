@@ -278,7 +278,6 @@ export const ThemeProvider = ({ children }) => {
     setCurrentTheme(theme)
     applyTheme(theme)
     localStorage.setItem('selectedThemeId', theme.id)
-    // 자동 닫기 없음 — 수동으로만 닫기
   }, [])
 
   const toggleOpen = useCallback(() => setIsOpen(v => !v), [])
