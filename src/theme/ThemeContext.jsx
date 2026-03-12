@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, useCallback, useRef } from 'react'
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react'
 import { useLocation } from 'react-router-dom'
 
 /* THEMES  여기서 객체 추가만 하면됨 */
@@ -266,25 +266,19 @@ export const ThemeProvider = ({ children }) => {
   const location = useLocation()
   const isHome   = location.pathname === '/'
 
-  const [currentTheme, setCurrentTheme] = useState(THEMES[0])
-  const [isOpen,       setIsOpen]       = useState(true)
-  const prevIsHome = useRef(isHome)
+  const [currentTheme, setCurrentTheme] = useState(() => {
+    const saved = localStorage.getItem('selectedThemeId')
+    return THEMES.find(t => t.id === saved) ?? THEMES[0]
+  })
+  const [isOpen, setIsOpen] = useState(true)
 
-  useEffect(() => { applyTheme(THEMES[0]) }, [])
-
-  useEffect(() => {
-    if (prevIsHome.current && !isHome) setIsOpen(false)
-    prevIsHome.current = isHome
-  }, [isHome])
-
-  useEffect(() => {
-    if (isHome) setIsOpen(true)
-  }, [isHome])
+  useEffect(() => { applyTheme(currentTheme) }, [])
 
   const selectTheme = useCallback((theme) => {
     setCurrentTheme(theme)
     applyTheme(theme)
-    setIsOpen(false)
+    localStorage.setItem('selectedThemeId', theme.id)
+    // 자동 닫기 없음 — 수동으로만 닫기
   }, [])
 
   const toggleOpen = useCallback(() => setIsOpen(v => !v), [])

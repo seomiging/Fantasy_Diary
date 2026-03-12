@@ -1,19 +1,22 @@
-/* 태블릿 세로 */
+/*태블릿 세로 481px ~ 1024px*/
 
+/* 기본: portrait 책 숨김 */
 .book-portrait { display: none !important; }
 
 @media (max-width: 1024px) and (orientation: portrait) {
 
+  /* 배경 & 컨테이너 */
   .diary-bg.bg-portrait {
     align-items: center;
     justify-content: center;
-    background-color: var(--bg-dark);
+    background-color: #2a1a0e;
   }
   .book-container-portrait {
     align-items: center !important;
     justify-content: center !important;
   }
 
+  /* 가로형 책 숨김 */
   .book-open:not(.book-portrait) { display: none !important; }
 
   /* 표지 */
@@ -30,7 +33,7 @@
     height: 100%;
     object-fit: fill;
   }
-  .book-closed .click-hint { left: 54%; font-size: 11px; bottom: 13%; }
+  .book-closed .click-hint { left: 54%; font-size: 11px; bottom: 7%; }
   .book-closed.book-opening {
     animation: bookOpenTablet 0.6s cubic-bezier(0.4,0,0.2,1) forwards;
   }
@@ -52,6 +55,7 @@
     content: '';
     position: absolute;
     inset: 0;
+    background-image: url('/assets/theme1/cover_mobile1.png');
     background-size: 100% 100%;
     border-radius: 6px;
     z-index: 0;
@@ -71,6 +75,7 @@
   .port-inner {
     position: absolute;
     inset: 0;
+    background-image: url('/assets/theme1/innerpage_mobile.png');
     background-size: 100% 100%;
     z-index: 1;
   }
@@ -83,6 +88,7 @@
     padding: 12px 14px 36px;
   }
 
+  /* 클릭존 (위/아래 15%) */
   .port-click-zone-top {
     position: absolute;
     top: 0; left: 0; right: 0;
@@ -97,14 +103,14 @@
   }
   .port-page .page-number {
     position: absolute;
-    bottom: 26px;
+    bottom: 20px;
     left: 50%;
     transform: translateX(-50%);
     z-index: 4;
     font-size: 13px;
   }
 
-  /* 속지 넘기기 */
+  /* 속지 페이지 넘기기 클래스 */
   .port-inner.port-exit-down  { animation: portExitDown  0.3s  ease-in  forwards; z-index: 2; }
   .port-inner.port-enter-up   { animation: portEnterUp   0.35s ease-out forwards; z-index: 1; }
   .port-inner.port-exit-up    { animation: portExitUp    0.3s  ease-in  forwards; z-index: 2; }
@@ -117,7 +123,7 @@
     transform: translateX(-50%);
     background: none;
     border: none;
-    color: #ffffff;
+    color: var(--gold-light);
     font-size: 36px;
     width: 56px;
     height: 56px;
@@ -160,7 +166,7 @@
     letter-spacing: 0.15em;
   }
 
-  /* 인덱스 탭 */
+  /* 인덱스 탭 (세로 오른쪽) */
   .book-portrait .diary-nav {
     position: absolute;
     top: 0; bottom: 0;
@@ -182,10 +188,10 @@
     font-weight: 600;
     letter-spacing: 0.08em;
     border-radius: 0 5px 5px 0;
-    border: 1px solid var(--tab-border);
+    border: 1px solid rgba(180,140,80,0.45);
     border-left: none;
-    background: var(--tab-bg);
-    color: var(--tab-color);
+    background: rgba(245,230,200,0.97);
+    color: var(--ink);
     text-decoration: none;
     display: flex;
     align-items: center;
@@ -196,12 +202,12 @@
     writing-mode: vertical-rl;
     text-orientation: mixed;
   }
-  .book-portrait .nav-item:hover { color: var(--tab-color-active); background: var(--tab-bg-hover); }
+  .book-portrait .nav-item:hover { color: var(--crimson-dark); background: rgba(255,244,218,1); }
   .book-portrait .nav-item.active {
-    color: var(--tab-color-active);
+    color: var(--crimson-dark);
     font-weight: 700;
-    background: var(--tab-bg-active);
-    border-color: var(--tab-border-active);
+    background: rgba(255,248,228,1);
+    border-color: rgba(180,140,80,0.6);
     width: 42px;
     box-shadow: 2px 2px 10px rgba(0,0,0,0.32);
   }

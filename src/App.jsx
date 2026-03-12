@@ -12,22 +12,20 @@ const NAV_ITEMS = [
   { path: '/diary',   label: 'Diary'   },
 ]
 
-const PAGES = ['/', '/profile', '/diary', '/diary/2', '/diary/3']
+// 웹: 스프레드(양면) 기준 경로 배열
+const SPREAD_PATHS = ['/', '/profile', '/diary']
 
 const App = () => (
   <Routes>
-    <Route path="/"        element={<DiaryShell><div className="page-inner" /></DiaryShell>} />
-    <Route path="/profile" element={<DiaryShell><Profile /></DiaryShell>} />
-    <Route path="/diary"   element={<DiaryShell><Diary pageNum={1} /></DiaryShell>} />
-    <Route path="/diary/2" element={<DiaryShell><Diary pageNum={2} /></DiaryShell>} />
-    <Route path="/diary/3" element={<DiaryShell><Diary pageNum={3} /></DiaryShell>} />
+    <Route path="/"        element={<DiaryShell spreadIdx={0} />} />
+    <Route path="/profile" element={<DiaryShell spreadIdx={1} />} />
+    <Route path="/diary"   element={<DiaryShell spreadIdx={2} />} />
   </Routes>
 )
 
-const DiaryShell = ({ children }) => {
+const DiaryShell = ({ spreadIdx }) => {
   const location        = useLocation()
   const navigate        = useNavigate()
-  const [phase,         setPhase]         = useState(null)
   const [opening,       setOpening]       = useState(false)
   const [closing,       setClosing]       = useState(false)
   const [isOpen,        setIsOpen]        = useState(false)
@@ -37,124 +35,59 @@ const DiaryShell = ({ children }) => {
   const { currentTheme } = useTheme()
   const busy = useRef(false)
 
-  const isHome    = location.pathname === '/'
-  const pageIndex = PAGES.indexOf(location.pathname)
+  const isHome = location.pathname === '/'
 
-  //  흰색 커서 동그라미 (잉크펜 끝 표시) 
+  // ── 흰색 커서 동그라미 ──
   useEffect(() => {
     const dot = document.createElement('div')
     dot.id = 'cursor-dot'
     Object.assign(dot.style, {
-      position:      'fixed',
-      width:         '10px',
-      height:        '10px',
-      borderRadius:  '50%',
-      background:    '#ffffff',
-      boxShadow:     '0 0 6px 2px rgba(255,255,255,0.8), 0 0 14px 4px rgba(255,255,255,0.35)',
-      pointerEvents: 'none',
-      zIndex:        '99999',
-      transform:     'translate(-50%, -50%)',
-      transition:    'opacity 0.2s',
-      opacity:       '0',
+      position: 'fixed', width: '10px', height: '10px',
+      borderRadius: '50%', background: '#ffffff',
+      boxShadow: '0 0 6px 2px rgba(255,255,255,0.8), 0 0 14px 4px rgba(255,255,255,0.35)',
+      pointerEvents: 'none', zIndex: '99999',
+      transform: 'translate(-50%, -50%)', transition: 'opacity 0.2s', opacity: '0',
     })
     document.body.appendChild(dot)
-    const move = (e) => {
-      dot.style.left    = e.clientX + 'px'
-      dot.style.top     = e.clientY + 'px'
-      dot.style.opacity = '1'
-    }
+    const move = (e) => { dot.style.left = e.clientX + 'px'; dot.style.top = e.clientY + 'px'; dot.style.opacity = '1' }
     const hide = () => { dot.style.opacity = '0' }
     window.addEventListener('mousemove', move)
     window.addEventListener('mouseleave', hide)
-    return () => {
-      window.removeEventListener('mousemove', move)
-      window.removeEventListener('mouseleave', hide)
-      dot.remove()
-    }
+    return () => { window.removeEventListener('mousemove', move); window.removeEventListener('mouseleave', hide); dot.remove() }
   }, [])
 
-  //  반응형 감지 + scale 계산 
-  // 웹/가로 기준: book-open(1300x800) + 좌우버튼(68*2) + 여백
-  const BASE_W = 1436
-  const BASE_H = 946
-  // portrait 기준: book(400x540) + 탭(36+여백)
-  const PORT_W = 456
-  const PORT_H = 720
+  // ── 반응형 scale ──
+  const BASE_W = 1436; const BASE_H = 946
+  const PORT_W = 456;  const PORT_H = 720
 
   useEffect(() => {
-    // 사파리는 innerHeight가 주소창 포함이라 visualViewport 사용
     const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent)
-    const getVH = () => {
-      if (isSafari && window.visualViewport) return window.visualViewport.height
-      return document.documentElement.clientHeight || window.innerHeight
-    }
-
+    const getVH = () => isSafari && window.visualViewport ? window.visualViewport.height : document.documentElement.clientHeight || window.innerHeight
     const check = () => {
       const portrait = window.matchMedia('(max-width:1024px) and (orientation:portrait)').matches
       const phone    = window.matchMedia('(max-width:480px) and (orientation:portrait)').matches
-      setIsPortrait(portrait)
-      setIsMobilePhone(phone)
-      const vw = window.innerWidth
-      const vh = getVH()
-      if (!portrait) {
-        setScale(Math.min(vw / BASE_W, vh / BASE_H, 1))
-      } else if (phone) {
-        setScale(1)
-      } else {
-        setScale(Math.min((vw - 60) / PORT_W, (vh - 100) / PORT_H))
-      }
+      setIsPortrait(portrait); setIsMobilePhone(phone)
+      const vw = window.innerWidth; const vh = getVH()
+      if (!portrait) setScale(Math.min(vw / BASE_W, vh / BASE_H, 1))
+      else if (phone) setScale(1)
+      else setScale(Math.min((vw - 60) / PORT_W, (vh - 100) / PORT_H))
     }
     check()
     window.addEventListener('resize', check)
     window.addEventListener('orientationchange', check)
-    if (isSafari && window.visualViewport) {
-      window.visualViewport.addEventListener('resize', check)
-    }
+    if (isSafari && window.visualViewport) window.visualViewport.addEventListener('resize', check)
     return () => {
       window.removeEventListener('resize', check)
       window.removeEventListener('orientationchange', check)
-      if (isSafari && window.visualViewport) {
-        window.visualViewport.removeEventListener('resize', check)
-      }
     }
   }, [])
 
-  const goTo = useCallback((path, dir) => {
-    if (busy.current) return
+  const goTo = useCallback((idx) => {
+    if (busy.current || idx < 0 || idx >= SPREAD_PATHS.length) return
     busy.current = true
-    setPhase(dir === 'next' ? 'exit-next' : 'exit-prev')
-    setTimeout(() => {
-      navigate(path)
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          setPhase(dir === 'next' ? 'enter-next' : 'enter-prev')
-          setTimeout(() => { setPhase(null); busy.current = false }, 400)
-        })
-      })
-    }, 320)
+    navigate(SPREAD_PATHS[idx])
+    setTimeout(() => { busy.current = false }, 300)
   }, [navigate])
-
-  //  마우스 휠로 페이지 이동 
-  const scrollAccum = useRef(0)
-  const lastScroll  = useRef(0)
-  const handleWheel = useCallback((e) => {
-    if (isHome || busy.current) return
-    const now = Date.now()
-    if (now - lastScroll.current < 500) return
-    const d = e.deltaY > 0 ? 1 : -1
-    scrollAccum.current += d
-    if (Math.abs(scrollAccum.current) >= 2) {
-      scrollAccum.current = 0
-      lastScroll.current  = now
-      if (d > 0 && pageIndex < PAGES.length - 1) goTo(PAGES[pageIndex + 1], 'next')
-      if (d < 0 && pageIndex > 0)                goTo(PAGES[pageIndex - 1], 'prev')
-    }
-  }, [isHome, pageIndex, goTo])
-
-  useEffect(() => {
-    window.addEventListener('wheel', handleWheel, { passive: true })
-    return () => window.removeEventListener('wheel', handleWheel)
-  }, [handleWheel])
 
   const openBook = () => {
     if (opening) return
@@ -167,43 +100,39 @@ const DiaryShell = ({ children }) => {
     if (closing) return
     setClosing(true)
     setTimeout(() => {
-      setIsOpen(false)
-      navigate('/')
+      setIsOpen(false); navigate('/')
       setTimeout(() => setClosing(false), 100)
     }, 420)
   }, [closing, navigate])
 
   useEffect(() => {
     if (!isHome) setIsOpen(true)
-    else         setIsOpen(false)
+    else setIsOpen(false)
   }, [isHome])
 
-  const rightCls = phase === 'exit-next'  ? ' flip-exit-right'
-                 : phase === 'enter-next' ? ' flip-enter-right' : ''
-  const leftCls  = phase === 'exit-prev'  ? ' flip-exit-left'
-                 : phase === 'enter-prev' ? ' flip-enter-left'  : ''
-
-  const clickRight = () => {
-    if (!busy.current && pageIndex < PAGES.length - 1) goTo(PAGES[pageIndex + 1], 'next')
-  }
-  const clickLeft = () => {
-    if (!busy.current && pageIndex > 0) goTo(PAGES[pageIndex - 1], 'prev')
-  }
+  // 각 스프레드의 좌우 콘텐츠
+  const spreads = [
+    { left: null,                    right: null                    },
+    { left: <Profile pageNum={1} />, right: <Profile pageNum={2} /> },
+    { left: <Diary   pageNum={1} />, right: <Diary   pageNum={2} /> },
+  ]
+  const spread      = spreads[spreadIdx]
+  const pageNumLeft  = spreadIdx > 0 ? spreadIdx * 2 - 1 : ''
+  const pageNumRight = spreadIdx > 0 ? spreadIdx * 2     : ''
 
   return (
     <div className={`diary-bg${isHome && !isMobilePhone ? ' bg-home' : ''}${!isHome ? ' bg-content' : ''}${isPortrait ? ' bg-portrait' : ''}${isMobilePhone ? ' bg-phone' : ''}`}>
       <div
         className={`book-container${isPortrait ? ' book-container-portrait' : ''}${isMobilePhone ? ' book-container-phone' : ''}`}
         style={isMobilePhone ? undefined : {
-          position:  'absolute',
-          top:       '50%',
-          left:      '50%',
+          position: 'absolute', top: '50%', left: '50%',
           transform: `translate(-50%, -50%) scale(${scale})`,
         }}
       >
         {!isMobilePhone && <ThemeSelector isMobilePhone={false} />}
-      {isMobilePhone ? (
-          <AppMobile isMobilePhone={true}>{children}</AppMobile>
+
+        {isMobilePhone ? (
+          <AppMobile isMobilePhone={true} spreadIdx={spreadIdx} />
 
         ) : isHome ? (
           <div className={`book-closed${opening ? ' book-opening' : ''}`} onClick={openBook}>
@@ -215,21 +144,28 @@ const DiaryShell = ({ children }) => {
           </div>
 
         ) : isPortrait ? (
-          <AppMobile isMobilePhone={false}>{children}</AppMobile>
+          <AppMobile isMobilePhone={false} spreadIdx={spreadIdx} />
 
         ) : (
+          /* ── 웹 펼침 뷰 ── */
           <div className={`book-open${closing ? ' book-closing' : isOpen ? ' book-opened' : ''}`}>
-            <div className="page-left" onClick={clickLeft}
-              style={{ cursor: pageIndex > 0 ? 'pointer' : 'default' }}>
+
+            {/* 왼쪽 페이지 — 클릭 이동 없음 */}
+            <div className="page-left">
               <div className="page-mat" />
-              <div className={`page-inner-left${leftCls}`} />
-              <span className="page-number">{pageIndex > 0 ? pageIndex * 2 - 1 : ''}</span>
+              <div className="page-inner-left" />
+              {spread.left && (
+                <div className="page-content page-content-left">
+                  {spread.left}
+                </div>
+              )}
+              <span className="page-number">{pageNumLeft}</span>
             </div>
 
-            <div className="page-right" onClick={clickRight}
-              style={{ cursor: pageIndex < PAGES.length - 1 ? 'pointer' : 'default' }}>
+            {/* 오른쪽 페이지 */}
+            <div className="page-right">
               <div className="page-mat" />
-              <div className={`page-inner-right${rightCls}`} />
+              <div className="page-inner-right" />
               <nav className="diary-nav" onClick={e => e.stopPropagation()}>
                 {NAV_ITEMS.map(item => (
                   <NavLink key={item.path} to={item.path}
@@ -238,21 +174,23 @@ const DiaryShell = ({ children }) => {
                   </NavLink>
                 ))}
               </nav>
-              <div className="page-content" onClick={pageIndex < PAGES.length - 1 ? clickRight : undefined}>
-                {children}
+              <div className="page-content">
+                {spread.right}
               </div>
-              <span className="page-number">{pageIndex * 2}</span>
+              <span className="page-number">{pageNumRight}</span>
             </div>
 
             <button className="close-btn" onClick={goHome} title="홈으로">✕</button>
-            {pageIndex > 0 && (
-              <button className="nav-btn prev" onClick={clickLeft}>❮</button>
+
+            {/* 화살표 버튼으로만 이동 */}
+            {spreadIdx > 0 && (
+              <button className="nav-btn prev" onClick={() => goTo(spreadIdx - 1)}>❮</button>
             )}
-            {pageIndex < PAGES.length - 1 && (
-              <button className="nav-btn next" onClick={clickRight}>❯</button>
+            {spreadIdx < SPREAD_PATHS.length - 1 && (
+              <button className="nav-btn next" onClick={() => goTo(spreadIdx + 1)}>❯</button>
             )}
-            {pageIndex === PAGES.length - 1 && (
-              <button className="home-return-btn" onClick={() => goTo(PAGES[1], 'prev')}>↩ 처음으로</button>
+            {spreadIdx === SPREAD_PATHS.length - 1 && (
+              <button className="home-return-btn" onClick={() => goTo(1)}>↩ 처음으로</button>
             )}
           </div>
         )}

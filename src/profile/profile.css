@@ -1,1 +1,148 @@
-/* Profile 스타일 */
+.prof-page {
+  width: 100%;
+  height: 100%;
+  padding: 36px 44px 28px 44px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  font-family: 'NexonWarhaven', serif;
+  color: var(--ink);
+  position: relative;
+  overflow: hidden;
+}
+
+/* 헤더 */
+.prof-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+}
+.prof-title {
+  font-size: clamp(15px, 1.4vw, 19px);
+  letter-spacing: 0.35em;
+  color: var(--crimson);
+  font-weight: 700;
+  text-transform: uppercase;
+}
+.prof-divider {
+  width: 60%;
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--gold), transparent);
+  margin-top: 8px;
+}
+
+/* 필드 행 */
+.prof-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin-bottom: 16px;
+}
+.prof-row {
+  display: flex;
+  align-items: baseline;
+  gap: 0;
+  padding: 7px 0;
+  border-bottom: 1px solid rgba(0,0,0,0.08);
+}
+.prof-label {
+  font-size: clamp(9px, 0.85vw, 11px);
+  letter-spacing: 0.2em;
+  color: var(--crimson);
+  width: 80px;
+  flex-shrink: 0;
+  text-transform: uppercase;
+  opacity: 0.85;
+}
+.prof-value {
+  font-size: clamp(11px, 1vw, 13px);
+  letter-spacing: 0.08em;
+  color: var(--ink);
+  flex: 1;
+}
+
+/* 섹션 타이틀 */
+.prof-section-title {
+  font-size: clamp(9px, 0.8vw, 10px);
+  letter-spacing: 0.3em;
+  color: var(--gold);
+  text-transform: uppercase;
+  margin: 14px 0 8px 0;
+  padding-left: 2px;
+}
+
+/* 자기소개 박스 */
+.prof-intro-box {
+  border-left: 2px solid var(--gold);
+  padding: 8px 12px;
+  background: rgba(0,0,0,0.025);
+  border-radius: 0 4px 4px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.prof-intro-box p {
+  margin: 0;
+  font-size: clamp(10px, 0.95vw, 12px);
+  letter-spacing: 0.05em;
+  line-height: 1.7;
+  color: var(--ink);
+}
+
+/* 스킬 태그 */
+.prof-tag-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+.prof-tag {
+  font-size: clamp(8px, 0.75vw, 10px);
+  letter-spacing: 0.12em;
+  color: var(--crimson);
+  border: 1px solid var(--gold);
+  border-radius: 20px;
+  padding: 3px 10px;
+  background: rgba(255,255,255,0.45);
+}
+
+/* 타임라인 */
+.prof-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin-bottom: 4px;
+}
+.prof-tl-row {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  padding: 5px 0;
+  border-bottom: 1px dashed rgba(0,0,0,0.07);
+}
+.prof-tl-year {
+  font-size: clamp(9px, 0.8vw, 10px);
+  color: var(--crimson);
+  letter-spacing: 0.1em;
+  width: 36px;
+  flex-shrink: 0;
+  opacity: 0.8;
+}
+.prof-tl-desc {
+  font-size: clamp(10px, 0.9vw, 12px);
+  color: var(--ink);
+  letter-spacing: 0.05em;
+}
+
+/* 페이지 하단 장식 */
+.prof-page-deco {
+  position: absolute;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: var(--gold);
+  font-size: 12px;
+  opacity: 0.6;
+}

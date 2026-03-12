@@ -2,22 +2,26 @@ import React, { useState, useEffect, useRef, useCallback } from 'react'
 import { NavLink, useLocation, useNavigate } from 'react-router-dom'
 import ThemeSelector from './theme/ThemeSelector'
 import { useTheme } from './theme/ThemeContext'
+import Profile from './profile/Profile'
+import Diary from './diary/Diary'
 
 const NAV_ITEMS = [
   { path: '/profile', label: 'Profile' },
   { path: '/diary',   label: 'Diary'   },
 ]
 
-const WEB_SPREADS = ['/profile', '/diary', '/diary/2', '/diary/3']
+// 페이지 4장: profile p1 → profile p2 → diary p1 → diary p2
+const MOBILE_PAGES = [
+  { path: '/profile', pageNum: 1, page: 1 },
+  { path: '/profile', pageNum: 2, page: 2 },
+  { path: '/diary',   pageNum: 1, page: 3 },
+  { path: '/diary',   pageNum: 2, page: 4 },
+]
 
-const MOBILE_PAGES = WEB_SPREADS.flatMap((path, i) => [
-  { path, side: 'L', page: i * 2 + 1 },
-  { path, side: 'R', page: i * 2 + 2 },
-])
-
-const AppMobile = ({ children, isMobilePhone }) => {
+const AppMobile = ({ isMobilePhone }) => {
   const location = useLocation()
   const navigate = useNavigate()
+  const { currentTheme } = useTheme()
 
   const [phase,        setPhase]        = useState(null)
   const [isOpen,       setIsOpen]       = useState(false)
@@ -25,12 +29,10 @@ const AppMobile = ({ children, isMobilePhone }) => {
   const [coverLeaving, setCoverLeaving] = useState(false)
   const [step,         setStep]         = useState(0)
 
-  const { currentTheme } = useTheme()
   const busy       = useRef(false)
   const stepRef    = useRef(0)
   const lastScroll = useRef(0)
 
-  // stepRef를 step과 동기화
   useEffect(() => { stepRef.current = step }, [step])
 
   const isHome = location.pathname === '/'
@@ -40,7 +42,7 @@ const AppMobile = ({ children, isMobilePhone }) => {
     else { setIsOpen(false); setCoverLeaving(false) }
   }, [isHome])
 
-  // 표지로 완전히 돌아가기
+  // 표지로 돌아가기
   const goHome = useCallback(() => {
     if (closing) return
     setClosing(true)
@@ -51,7 +53,7 @@ const AppMobile = ({ children, isMobilePhone }) => {
     }, 400)
   }, [closing, navigate])
 
-  // 첫 페이지로 돌아가기 - closing 애니 후 step 0으로 이동
+  // 첫 페이지로 돌아가기
   const goFirstPage = useCallback(() => {
     if (closing || busy.current) return
     setClosing(true)
@@ -59,24 +61,19 @@ const AppMobile = ({ children, isMobilePhone }) => {
       setClosing(false)
       setIsOpen(false)
       setTimeout(() => {
-        setStep(2)
-        navigate('/diary')
+        setStep(0)
+        navigate('/profile')
         requestAnimationFrame(() => {
-          requestAnimationFrame(() => {
-            setIsOpen(true)
-          })
+          requestAnimationFrame(() => { setIsOpen(true) })
         })
       }, 50)
     }, 400)
   }, [closing, navigate])
 
-  // 표지 탭 → 애니 후 콘텐츠 진입
+  // 표지 탭 → 콘텐츠 진입
   const tapStart = useCallback(() => {
     setCoverLeaving(true)
-    setTimeout(() => {
-      navigate('/profile')
-      setStep(0)
-    }, 500)
+    setTimeout(() => { navigate('/profile'); setStep(0) }, 500)
   }, [navigate])
 
   const goStep = useCallback((nextStep, dir) => {
@@ -104,7 +101,7 @@ const AppMobile = ({ children, isMobilePhone }) => {
     if (stepRef.current > 0) goStep(stepRef.current - 1, 'prev')
   }, [goStep])
 
-  // 휠 이벤트 - stepRef로 stale closure 방지
+  // 휠 이벤트
   useEffect(() => {
     const handleWheel = (e) => {
       if (busy.current) return
@@ -118,8 +115,8 @@ const AppMobile = ({ children, isMobilePhone }) => {
     return () => window.removeEventListener('wheel', handleWheel)
   }, [clickNext, clickPrev])
 
-  const currentSide = MOBILE_PAGES[step]?.side ?? 'L'
   const currentPage = MOBILE_PAGES[step]?.page ?? 1
+  const currentSide = step % 2 === 0 ? 'l' : 'r'
   const isLastPage  = step === MOBILE_PAGES.length - 1
   const isFirstPage = step === 0
 
@@ -131,7 +128,16 @@ const AppMobile = ({ children, isMobilePhone }) => {
 
   const bookCls = closing ? ' book-closing' : isOpen ? ' book-opened' : ''
 
-  // 태블릿 portrait
+  // 현재 step에 맞는 컴포넌트 직접 렌더 — children 없음
+  const renderContent = () => {
+    const p = MOBILE_PAGES[step]
+    if (!p) return null
+    if (p.path === '/profile') return <Profile pageNum={p.pageNum} />
+    if (p.path === '/diary')   return <Diary   pageNum={p.pageNum} />
+    return null
+  }
+
+  // ── 태블릿 portrait ──
   if (!isMobilePhone) {
     if (isHome) {
       return (
@@ -145,11 +151,9 @@ const AppMobile = ({ children, isMobilePhone }) => {
     }
     return (
       <div className={`book-open book-portrait${bookCls}`}>
-        <div className={`port-page port-page-${currentSide.toLowerCase()}`}>
+        <div className={`port-page port-page-${currentSide}`}>
           <div className={`port-inner${portCls}`} />
-          <div className="page-content">{children}</div>
-          <div className="port-click-zone-top" onClick={clickPrev} />
-          <div className="port-click-zone" onClick={clickNext} />
+          <div className="page-content">{renderContent()}</div>
           <span className="page-number">{currentPage}</span>
         </div>
         <nav className="diary-nav">
@@ -173,7 +177,7 @@ const AppMobile = ({ children, isMobilePhone }) => {
     )
   }
 
-  // 스마트폰: 표지
+  // ── 스마트폰: 표지 ──
   if (isHome) {
     return (
       <div className={`mob-intro${coverLeaving ? ' mob-intro-leave' : ''}`} onClick={tapStart}>
@@ -186,13 +190,10 @@ const AppMobile = ({ children, isMobilePhone }) => {
     )
   }
 
-  // 스마트폰: 콘텐츠
+  // ── 스마트폰: 콘텐츠 ──
   return (
     <div className="mob-shell">
-
-      <header className="mob-header"
-        style={{ backgroundImage: `url('${currentTheme.assets.mobileHeader}')` }}
-      >
+      <header className="mob-header">
         <img src={currentTheme.assets.nameLogo} alt="logo" className="mob-logo" onClick={goHome} />
       </header>
 
@@ -211,7 +212,6 @@ const AppMobile = ({ children, isMobilePhone }) => {
       </nav>
 
       <div className="mob-book-wrap">
-
         {isFirstPage ? (
           <button className="mob-goto-btn" onClick={goHome}>표지로 돌아가기</button>
         ) : (
@@ -220,9 +220,7 @@ const AppMobile = ({ children, isMobilePhone }) => {
 
         <div className={`mob-page${bookCls}`}>
           <div className={`port-inner${portCls}`} />
-          <div className="mob-page-content">{children}</div>
-          <div className="port-click-zone-top" onClick={clickPrev} />
-          <div className="port-click-zone" onClick={clickNext} />
+          <div className="mob-page-content">{renderContent()}</div>
           <span className="mob-page-number">{currentPage}</span>
         </div>
 
@@ -231,7 +229,6 @@ const AppMobile = ({ children, isMobilePhone }) => {
         ) : (
           <button className="mob-arrow mob-arrow-next" onClick={clickNext}>﹀</button>
         )}
-
       </div>
     </div>
   )

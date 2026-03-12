@@ -234,7 +234,7 @@
   /* 페이지 번호 */
   .mob-page-number {
     position: absolute;
-    bottom: 22px;
+    bottom: 28px;
     left: 50%;
     transform: translateX(-50%);
     font-family: 'Ridibatang', serif;
