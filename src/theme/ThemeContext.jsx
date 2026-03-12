@@ -182,11 +182,11 @@ export const THEMES = [
       mobNavColor:      '#2C1A04',
       mobNavDivider:    'rgba(28,16,8,0.18)',
       mobNavActiveBg:   'rgba(200,36,28,0.25)',
-      hintColor:        '#C8A030',
-      hintBorder:       'rgba(200,160,48,0.65)',
-      hintShadow:       'rgba(200,160,48,0.35)',
+      hintColor:        '#413b2cff',
+      hintBorder:       'rgba(255, 8, 8, 0.65)',
+      hintShadow:       'rgba(168, 150, 100, 0.35)',
       hintTextShadow:   'rgba(224,188,96,0.9)',
-      logoShadow:       'rgba(28,16,8,0.45)',
+      logoShadow:       'rgba(255, 255, 255, 0.45)',
     }
   },
 ]
@@ -254,6 +254,7 @@ const applyTheme = (theme) => {
     .page-inner-left       { background-image: url('${a.innerLeft}')   !important; }
     .page-inner-right      { background-image: url('${a.innerRight}')  !important; }
     .port-inner            { background-image: url('${a.innerMobile}') !important; }
+    .mob-page::before      { background-image: url('${a.innerMobile}') !important; }
     .mob-header            { background-image: url('${a.mobileHeader}') !important; }
     .mob-logo              { filter: drop-shadow(0 1px 4px ${u.logoShadow}) !important; }
   `

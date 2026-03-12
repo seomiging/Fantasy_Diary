@@ -30,9 +30,6 @@
   --btn-bg-hover:     rgba(139,26,26,0.98);
   --btn-color:        #E8C97A;
   --btn-color-hover:  #ffffff;
-  --btn-border:       #C9A84C;
-  --btn-shadow:       rgba(201,168,76,0.7);
-  --btn-shadow2:      rgba(201,168,76,0.35);
   --btn-border:       var(--gold);
   --btn-shadow:       rgba(201,168,76,0.7);
   --btn-shadow2:      rgba(201,168,76,0.35);

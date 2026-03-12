@@ -21,13 +21,13 @@
   margin-bottom: 6px;
 }
 .diary-date {
-  font-size: clamp(15px, 1.4vw, 18px);
+  font-size: clamp(16px, 1.6vw, 20px);
   letter-spacing: 0.15em;
   color: var(--crimson);
   font-weight: 700;
 }
 .diary-day {
-  font-size: clamp(11px, 1vw, 13px);
+  font-size: clamp(12px, 1.1vw, 15px);
   letter-spacing: 0.25em;
   color: var(--gold);
   text-transform: uppercase;
@@ -52,14 +52,14 @@
   gap: 8px;
 }
 .diary-meta-label {
-  font-size: clamp(10px, 0.9vw, 12px);
+  font-size: clamp(11px, 1vw, 13px);
   letter-spacing: 0.2em;
   color: var(--crimson);
   opacity: 0.75;
 }
 .diary-select {
   font-family: inherit;
-  font-size: clamp(11px, 1vw, 13px);
+  font-size: clamp(12px, 1.1vw, 14px);
   color: var(--ink);
   background: rgba(255,255,255,0.5);
   border: 1px solid rgba(0,0,0,0.12);
@@ -70,7 +70,7 @@
 }
 .diary-select:focus { border-color: var(--gold); }
 .diary-meta-value {
-  font-size: clamp(11px, 1vw, 13px);
+  font-size: clamp(12px, 1.1vw, 14px);
   color: var(--ink);
   opacity: 0.85;
 }
@@ -82,7 +82,7 @@
   border: none;
   outline: none;
   font-family: inherit;
-  font-size: clamp(14px, 1.3vw, 17px);
+  font-size: clamp(15px, 1.5vw, 19px);
   letter-spacing: 0.1em;
   color: var(--ink);
   padding: 4px 0;
@@ -108,7 +108,7 @@
   outline: none;
   resize: none;
   font-family: inherit;
-  font-size: clamp(13px, 1.15vw, 15px);
+  font-size: clamp(14px, 1.3vw, 16px);
   line-height: 2;
   letter-spacing: 0.04em;
   color: var(--ink);
@@ -160,7 +160,7 @@
 }
 .diary-page--sample .diary-sample-text p {
   margin: 0;
-  font-size: clamp(13px, 1.15vw, 15px);
+  font-size: clamp(14px, 1.3vw, 16px);
   line-height: 2;
   letter-spacing: 0.04em;
   color: var(--ink);

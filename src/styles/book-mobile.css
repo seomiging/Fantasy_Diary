@@ -206,6 +206,18 @@
   }
   .mob-page.book-opened  { animation: bookSpreadPortrait 0.5s cubic-bezier(0.22,1,0.36,1) 0.1s forwards; }
   .mob-page.book-closing { animation: bookClosePortrait  0.4s cubic-bezier(0.4,0,0.8,0.2) forwards; }
+
+  /* 고정 배경 속지 — 페이지 넘김 모션 중에도 항상 보임 */
+  .mob-page::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-size: 100% 100%;
+    background-image: inherit;
+    z-index: 0;
+    border-radius: 6px;
+    pointer-events: none;
+  }
   .mob-page .port-inner {
     position: absolute;
     inset: 0;
@@ -234,7 +246,7 @@
   /* 페이지 번호 */
   .mob-page-number {
     position: absolute;
-    bottom: 28px;
+    bottom: 30px;
     left: 50%;
     transform: translateX(-50%);
     font-family: 'Ridibatang', serif;

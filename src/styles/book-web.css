@@ -1,4 +1,4 @@
-/*웹 / 가로 */
+/* 웹 / 가로 모드 */
 
 /* 닫힌 표지 */
 .book-closed {
@@ -23,7 +23,7 @@
 }
 .book-closed .click-hint {
   position: absolute;
-  bottom: 14%;
+  bottom: 12%;
   left: 56%;
   transform: translateX(-50%);
   font-family: 'NexonWarhaven', serif;
@@ -78,7 +78,7 @@
 }
 .page-left .page-number {
   position: absolute;
-  bottom: 22px;
+  bottom: 42px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 2;
@@ -104,7 +104,7 @@
 }
 .page-right .page-number {
   position: absolute;
-  bottom: 22px;
+  bottom: 42px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 3;
@@ -218,9 +218,9 @@
   right: -48px;
   width: 34px;
   height: 34px;
-  background: rgba(92,15,15,0.92);
-  border: 1px solid var(--gold);
-  color: var(--gold-light);
+  background: var(--btn-bg);
+  border: 1px solid var(--btn-border);
+  color: var(--btn-color);
   font-size: 16px;
   display: flex;
   align-items: center;
@@ -232,11 +232,11 @@
   line-height: 1;
 }
 .close-btn:hover {
-  background: rgba(139,26,26,0.98);
-  color: #fff;
+  background: var(--btn-bg-hover);
+  color: var(--btn-color-hover);
   transform: scale(1.18);
-  box-shadow: 0 0 14px rgba(201,168,76,0.7), 0 0 28px rgba(201,168,76,0.35);
-  border-color: var(--gold-light);
+  box-shadow: 0 0 14px var(--btn-shadow), 0 0 28px var(--btn-shadow2);
+  border-color: var(--btn-border);
 }
 
 /* 처음으로 버튼 (웹) */
@@ -245,9 +245,9 @@
   bottom: -64px;
   left: 50%;
   transform: translateX(-50%);
-  background: rgba(92,15,15,0.92);
-  border: 1px solid var(--gold);
-  color: var(--gold-light);
+  background: var(--btn-bg);
+  border: 1px solid var(--btn-border);
+  color: var(--btn-color);
   font-family: 'NexonWarhaven', serif;
   font-size: 14px;
   letter-spacing: 0.2em;
@@ -259,11 +259,11 @@
   border-radius: 20px;
 }
 .home-return-btn:hover {
-  background: rgba(139,26,26,0.98);
-  color: #fff;
+  background: var(--btn-bg-hover);
+  color: var(--btn-color-hover);
   transform: translateX(-50%) translateY(-3px);
-  box-shadow: 0 0 16px rgba(201,168,76,0.7), 0 6px 24px rgba(0,0,0,0.6);
-  border-color: var(--gold-light);
+  box-shadow: 0 0 16px var(--btn-shadow), 0 6px 24px rgba(0,0,0,0.6);
+  border-color: var(--btn-border);
   letter-spacing: 0.28em;
 }
 
