@@ -12,14 +12,14 @@ const NAV_ITEMS = [
   { path: '/diary',   label: 'Diary'   },
 ]
 
-// 웹: 스프레드(양면) 기준 경로 배열
-const SPREAD_PATHS = ['/', '/profile', '/diary']
+const SPREAD_PATHS = ['/', '/profile', '/diary', '/diary2']
 
 const App = () => (
   <Routes>
     <Route path="/"        element={<DiaryShell spreadIdx={0} />} />
     <Route path="/profile" element={<DiaryShell spreadIdx={1} />} />
     <Route path="/diary"   element={<DiaryShell spreadIdx={2} />} />
+    <Route path="/diary2"  element={<DiaryShell spreadIdx={3} />} />
   </Routes>
 )
 
@@ -32,12 +32,15 @@ const DiaryShell = ({ spreadIdx }) => {
   const [isPortrait,    setIsPortrait]    = useState(false)
   const [isMobilePhone, setIsMobilePhone] = useState(false)
   const [scale,         setScale]         = useState(1)
+  // 웹 페이지 넘김 애니메이션 상태
+  const [flipDir,       setFlipDir]       = useState(null) // 'next' | 'prev' | null
+  const [flipPhase,     setFlipPhase]     = useState(null) // 'exit' | 'enter' | null
   const { currentTheme } = useTheme()
   const busy = useRef(false)
 
   const isHome = location.pathname === '/'
 
-  // ── 흰색 커서 동그라미 ──
+  // 흰색 커서 동그라미
   useEffect(() => {
     const dot = document.createElement('div')
     dot.id = 'cursor-dot'
@@ -56,7 +59,7 @@ const DiaryShell = ({ spreadIdx }) => {
     return () => { window.removeEventListener('mousemove', move); window.removeEventListener('mouseleave', hide); dot.remove() }
   }, [])
 
-  // ── 반응형 scale ──
+  // 반응형 scale
   const BASE_W = 1436; const BASE_H = 946
   const PORT_W = 456;  const PORT_H = 720
 
@@ -82,12 +85,23 @@ const DiaryShell = ({ spreadIdx }) => {
     }
   }, [])
 
+  // 웹 페이지 넘김: exit → navigate → enter
   const goTo = useCallback((idx) => {
     if (busy.current || idx < 0 || idx >= SPREAD_PATHS.length) return
     busy.current = true
-    navigate(SPREAD_PATHS[idx])
-    setTimeout(() => { busy.current = false }, 300)
-  }, [navigate])
+    const dir = idx > spreadIdx ? 'next' : 'prev'
+    setFlipDir(dir)
+    setFlipPhase('exit')
+    setTimeout(() => {
+      navigate(SPREAD_PATHS[idx])
+      setFlipPhase('enter')
+      setTimeout(() => {
+        setFlipPhase(null)
+        setFlipDir(null)
+        busy.current = false
+      }, 360)
+    }, 320)
+  }, [navigate, spreadIdx])
 
   const openBook = () => {
     if (opening) return
@@ -110,15 +124,30 @@ const DiaryShell = ({ spreadIdx }) => {
     else setIsOpen(false)
   }, [isHome])
 
-  // 각 스프레드의 좌우 콘텐츠
   const spreads = [
     { left: null,                    right: null                    },
     { left: <Profile pageNum={1} />, right: <Profile pageNum={2} /> },
     { left: <Diary   pageNum={1} />, right: <Diary   pageNum={2} /> },
+    { left: <Diary   pageNum={3} />, right: <Diary   pageNum={4} /> },
   ]
-  const spread      = spreads[spreadIdx]
+  const spread       = spreads[spreadIdx]
   const pageNumLeft  = spreadIdx > 0 ? spreadIdx * 2 - 1 : ''
   const pageNumRight = spreadIdx > 0 ? spreadIdx * 2     : ''
+
+  // flip 클래스 계산
+  // 책 넘김 원리:
+  // next(뒤로, ❯): 오른쪽 페이지가 왼쪽으로 넘어감 → exit-right → enter-left
+  // prev(앞으로, ❮): 왼쪽 페이지가 오른쪽으로 넘어감 → exit-left → enter-right
+  const leftFlipCls = flipPhase === 'exit'
+    ? (flipDir === 'prev' ? ' flip-exit-left'   : '')
+    : flipPhase === 'enter'
+    ? (flipDir === 'next' ? ' flip-enter-left'  : '')
+    : ''
+  const rightFlipCls = flipPhase === 'exit'
+    ? (flipDir === 'next' ? ' flip-exit-right'  : '')
+    : flipPhase === 'enter'
+    ? (flipDir === 'prev' ? ' flip-enter-right' : '')
+    : ''
 
   return (
     <div className={`diary-bg${isHome && !isMobilePhone ? ' bg-home' : ''}${!isHome ? ' bg-content' : ''}${isPortrait ? ' bg-portrait' : ''}${isMobilePhone ? ' bg-phone' : ''}`}>
@@ -147,13 +176,12 @@ const DiaryShell = ({ spreadIdx }) => {
           <AppMobile isMobilePhone={false} spreadIdx={spreadIdx} />
 
         ) : (
-          /* ── 웹 펼침 뷰 ── */
+          /* 웹 펼침 뷰 */
           <div className={`book-open${closing ? ' book-closing' : isOpen ? ' book-opened' : ''}`}>
 
-            {/* 왼쪽 페이지 — 클릭 이동 없음 */}
+            {/* 왼쪽 페이지 */}
             <div className="page-left">
-              <div className="page-mat" />
-              <div className="page-inner-left" />
+              <div className={`page-inner-left${leftFlipCls}`} />
               {spread.left && (
                 <div className="page-content page-content-left">
                   {spread.left}
@@ -164,8 +192,7 @@ const DiaryShell = ({ spreadIdx }) => {
 
             {/* 오른쪽 페이지 */}
             <div className="page-right">
-              <div className="page-mat" />
-              <div className="page-inner-right" />
+              <div className={`page-inner-right${rightFlipCls}`} />
               <nav className="diary-nav" onClick={e => e.stopPropagation()}>
                 {NAV_ITEMS.map(item => (
                   <NavLink key={item.path} to={item.path}
@@ -182,7 +209,6 @@ const DiaryShell = ({ spreadIdx }) => {
 
             <button className="close-btn" onClick={goHome} title="홈으로">✕</button>
 
-            {/* 화살표 버튼으로만 이동 */}
             {spreadIdx > 0 && (
               <button className="nav-btn prev" onClick={() => goTo(spreadIdx - 1)}>❮</button>
             )}

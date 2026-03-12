@@ -56,6 +56,11 @@
 
   /* 레이아웃 */
   --nav-h: 42px;
+
+  /* 폰트 (applyTheme에서 테마별로 덮어씀) */
+  --font-title:    'NexonWarhaven', serif;
+  --font-subtitle: 'NexonWarhaven', serif;
+  --font-body:     'Ridibatang', serif;
 }
 
 html, body, #root {

@@ -1,4 +1,4 @@
-/* animations.css  ·  @keyframes 전용 */
+/* @keyframes 전용 */
 
 /* 공통 */
 @keyframes blink-glow {
@@ -6,7 +6,7 @@
   50%       { opacity: 0.2; text-shadow: none; }
 }
 
-/* 웹-책 펼치기 / 닫기 */
+/* 웹 표지 열기 / 닫기 */
 @keyframes bookOpen {
   0%   { transform: rotateY(0deg)   translateY(0);     opacity: 1; }
   60%  { transform: rotateY(-40deg) translateY(-10px); opacity: 0.8; }
@@ -21,7 +21,7 @@
   to   { opacity: 0; transform: scaleX(0.6) translateY(20px); }
 }
 
-/* 태블릿-책 펼치기 / 닫기 */
+/* 태블릿 표지 열기 / 닫기 */
 @keyframes bookOpenTablet {
   0%   { transform: perspective(600px) rotateX(0deg);  opacity: 1; }
   40%  { transform: perspective(600px) rotateX(20deg); opacity: 0.9; }
@@ -36,27 +36,7 @@
   to   { opacity: 0; transform: scaleY(0.85) translateY(-8px); }
 }
 
-/* 웹-페이지 넘기기 */
-@keyframes exitRight {
-  0%   { transform: scaleX(1);     filter: brightness(1); }
-  100% { transform: scaleX(0);     filter: brightness(0.6); }
-}
-@keyframes enterRight {
-  0%   { transform: scaleX(0);     filter: brightness(0.6); }
-  65%  { transform: scaleX(1.015); filter: brightness(0.98); }
-  100% { transform: scaleX(1);     filter: brightness(1); }
-}
-@keyframes exitLeft {
-  0%   { transform: scaleX(1); filter: brightness(1); }
-  100% { transform: scaleX(0); filter: brightness(0.6); }
-}
-@keyframes enterLeft {
-  0%   { transform: scaleX(0);     filter: brightness(0.6); }
-  65%  { transform: scaleX(1.015); filter: brightness(0.98); }
-  100% { transform: scaleX(1);     filter: brightness(1); }
-}
-
-/* 태블릿/모바일-속지 페이지 넘기기 */
+/* 태블릿/모바일 속지 페이지 넘기기 */
 @keyframes portExitDown {
   0%   { transform: translateY(0);     opacity: 1; }
   100% { transform: translateY(-100%); opacity: 0.3; }
@@ -74,8 +54,31 @@
   100% { transform: translateY(0);     opacity: 1; }
 }
 
-/* 모바일-표지 나가기 */
+/* 모바일 표지 나가기 */
 @keyframes mobIntroLeave {
   0%   { transform: translateY(0);     opacity: 1; }
   100% { transform: translateY(-100%); opacity: 0; }
+}
+
+/* 웹 속지 페이지 넘기기 (flip) */
+/* next: 오른쪽 페이지가 왼쪽으로 접히며 퇴장, 왼쪽 페이지가 왼쪽에서 펼쳐짐 */
+/* prev: 왼쪽 페이지가 오른쪽으로 접히며 퇴장, 오른쪽 페이지가 오른쪽에서 펼쳐짐 */
+
+@keyframes exitRight {
+  0%   { transform: scaleX(1)    translateX(0);      filter: brightness(1); }
+  100% { transform: scaleX(0)    translateX(-10%);   filter: brightness(0.5); }
+}
+@keyframes enterLeft {
+  0%   { transform: scaleX(0)    translateX(-10%);   filter: brightness(0.5); }
+  65%  { transform: scaleX(1.02) translateX(0);      filter: brightness(0.95); }
+  100% { transform: scaleX(1)    translateX(0);      filter: brightness(1); }
+}
+@keyframes exitLeft {
+  0%   { transform: scaleX(1)    translateX(0);      filter: brightness(1); }
+  100% { transform: scaleX(0)    translateX(10%);    filter: brightness(0.5); }
+}
+@keyframes enterRight {
+  0%   { transform: scaleX(0)    translateX(10%);    filter: brightness(0.5); }
+  65%  { transform: scaleX(1.02) translateX(0);      filter: brightness(0.95); }
+  100% { transform: scaleX(1)    translateX(0);      filter: brightness(1); }
 }

@@ -50,7 +50,7 @@
     border: 1px solid var(--hint-border);
     border-radius: 20px;
     color: var(--hint-color);
-    font-family: 'NexonWarhaven', serif;
+    font-family: var(--font-title);
     font-size: clamp(10px, 3vw, 14px);
     letter-spacing: 0.3em;
     padding: clamp(7px, 2vw, 11px) clamp(18px, 6vw, 28px);
@@ -107,7 +107,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-family: 'NexonWarhaven', serif;
+    font-family: var(--font-title);
     font-size: 10px;
     letter-spacing: 0.05em;
     color: var(--mob-nav-color);
@@ -175,7 +175,7 @@
     border-top: 1px solid var(--tab-border);
     border-bottom: 1px solid var(--tab-border);
     color: var(--gold-light);
-    font-family: 'NexonWarhaven', serif;
+    font-family: var(--font-title);
     font-size: clamp(10px, 2.8vw, 13px);
     letter-spacing: 0.12em;
     flex-shrink: 0;
@@ -249,7 +249,7 @@
     bottom: 30px;
     left: 50%;
     transform: translateX(-50%);
-    font-family: 'Ridibatang', serif;
+    font-family: var(--font-body);
     font-size: 12px;
     color: var(--gold);
     opacity: 0.8;

@@ -26,7 +26,7 @@
   bottom: 12%;
   left: 56%;
   transform: translateX(-50%);
-  font-family: 'NexonWarhaven', serif;
+  font-family: var(--font-title);
   font-size: clamp(11px, 1.2vw, 14px);
   color: var(--hint-color);
   letter-spacing: 0.25em;
@@ -68,7 +68,6 @@
   overflow: hidden;
   z-index: 1;
 }
-.page-left .page-mat { display: none; }
 .page-left .page-inner-left {
   position: absolute;
   top: 0; bottom: 0; left: 12px; right: -8px;
@@ -93,7 +92,6 @@
   overflow: visible;
   z-index: 1;
 }
-.page-right .page-mat { display: none; }
 .page-right .page-inner-right {
   position: absolute;
   top: 0; bottom: 0; right: 12px; left: -8px;
@@ -138,7 +136,7 @@
   padding: 0 8px;
 }
 .nav-item {
-  font-family: 'NexonWarhaven', serif;
+  font-family: var(--font-title);
   font-size: 13px;
   font-weight: 600;
   color: var(--ink);
@@ -149,53 +147,31 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(245,230,200,0.97);
-  border: 1px solid rgba(180,140,80,0.45);
+  background: var(--tab-bg);
+  border: 1px solid var(--tab-border);
   border-bottom: none;
   border-radius: 8px 8px 0 0;
   box-shadow: 0 -2px 8px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.6);
   transition: all 0.18s;
 }
-.nav-item:hover { color: var(--crimson-dark); background: rgba(255,244,218,1); }
+.nav-item:hover { color: var(--crimson-dark); background: var(--tab-bg-hover); }
 .nav-item.active {
   color: var(--crimson-dark);
-  background: rgba(255,248,228,1);
-  border-color: rgba(180,140,80,0.6);
+  background: var(--tab-bg-active);
+  border-color: var(--tab-border-active);
   font-weight: 700;
   height: 40px;
   box-shadow: 0 -3px 14px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.8);
 }
 
-/* 페이지 넘기기 클래스 (웹) */
-.page-inner-right.flip-exit-right {
-  animation: exitRight 0.32s cubic-bezier(0.4,0,1,0.6) forwards;
-  transform-origin: left center;
-  z-index: 5;
-}
-.page-inner-right.flip-enter-right {
-  animation: enterRight 0.36s cubic-bezier(0,0.6,0.4,1) forwards;
-  transform-origin: left center;
-  z-index: 4;
-}
-.page-inner-left.flip-exit-left {
-  animation: exitLeft 0.32s cubic-bezier(0.4,0,1,0.6) forwards;
-  transform-origin: right center;
-  z-index: 5;
-}
-.page-inner-left.flip-enter-left {
-  animation: enterLeft 0.36s cubic-bezier(0,0.6,0.4,1) forwards;
-  transform-origin: right center;
-  z-index: 4;
-}
-
-/* 이전/다음 버튼 (웹) */
+/* 이전/다음 버튼 (웹) — 흰색 */
 .nav-btn {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
   background: none;
   border: none;
-  color: var(--gold-light);
+  color: #ffffff;
   font-size: 36px;
   width: 56px;
   height: 56px;
@@ -207,7 +183,7 @@
   filter: drop-shadow(0 2px 8px rgba(0,0,0,0.7));
   line-height: 1;
 }
-.nav-btn:hover { color: #fff; transform: translateY(-50%) scale(1.15); }
+.nav-btn:hover { color: #ffffff; transform: translateY(-50%) scale(1.15); }
 .nav-btn.prev  { left: -68px; }
 .nav-btn.next  { right: -68px; }
 
@@ -239,7 +215,7 @@
   border-color: var(--btn-border);
 }
 
-/* 처음으로 버튼 (웹) */
+/* 처음으로 버튼 */
 .home-return-btn {
   position: absolute;
   bottom: -64px;
@@ -248,7 +224,7 @@
   background: var(--btn-bg);
   border: 1px solid var(--btn-border);
   color: var(--btn-color);
-  font-family: 'NexonWarhaven', serif;
+  font-family: var(--font-title);
   font-size: 14px;
   letter-spacing: 0.2em;
   padding: 10px 28px;
@@ -271,4 +247,28 @@
 @media (max-width: 1024px) and (orientation: landscape) {
   .book-open:not(.book-portrait) { display: flex !important; }
   .book-portrait { display: none !important; }
+}
+
+/* 웹 속지 페이지 넘기기 클래스 */
+/* next: 오른쪽 페이지 접힘(right→left), 왼쪽 페이지 펼쳐짐(left←) */
+.page-inner-right.flip-exit-right {
+  animation: exitRight 0.32s cubic-bezier(0.4,0,1,0.6) forwards;
+  transform-origin: left center;
+  z-index: 5;
+}
+.page-inner-left.flip-enter-left {
+  animation: enterLeft 0.36s cubic-bezier(0,0.6,0.4,1) forwards;
+  transform-origin: right center;
+  z-index: 4;
+}
+/* prev: 왼쪽 페이지 접힘(left→right), 오른쪽 페이지 펼쳐짐(right←) */
+.page-inner-left.flip-exit-left {
+  animation: exitLeft 0.32s cubic-bezier(0.4,0,1,0.6) forwards;
+  transform-origin: right center;
+  z-index: 5;
+}
+.page-inner-right.flip-enter-right {
+  animation: enterRight 0.36s cubic-bezier(0,0.6,0.4,1) forwards;
+  transform-origin: left center;
+  z-index: 4;
 }

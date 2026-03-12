@@ -17,6 +17,11 @@ export const THEMES = [
       ink:         '#1C1008',
       bgDark:      '#2a1a0e',
     },
+    fonts: {
+      title:    "'NexonWarhaven', serif",
+      subtitle: "'NexonWarhaven', serif",
+      body:     "'Ridibatang', serif",
+    },
     assets: {
       webBg:           './assets/theme1/web_intro_bg.png',
       contentBg:       './assets/theme1/web_content_bg.png',
@@ -51,8 +56,6 @@ export const THEMES = [
       tabBgActive:      'rgba(255,248,228,1)',
       tabBorder:        'rgba(180,140,80,0.45)',
       tabBorderActive:  'rgba(180,140,80,0.6)',
-      tabColor:         '#5C3A10', 
-      tabColorActive:   '#8B1A1A',   
       mobNavBg:         'rgba(30,10,5,0.95)',
       mobNavBorder:     'rgba(201,168,76,0.4)',
       mobNavColor:      'rgba(232,201,122,0.75)',
@@ -62,7 +65,6 @@ export const THEMES = [
       hintBorder:       'rgba(232,201,122,0.6)',
       hintShadow:       'rgba(201,168,76,0.3)',
       hintTextShadow:   'rgba(232,201,122,0.9)',
-      logoShadow:       'rgba(0,0,0,0.45)',
     },
   },
   {
@@ -74,10 +76,15 @@ export const THEMES = [
       crimson:     '#D4788A',
       crimsonDark: '#B85A70',
       gold:        '#D4B87A',
-      goldLight:   '#EDD49A',
+      goldLight:   '#ece1c5',
       parchment:   '#F4EED8',
-      ink:         '#e4cc98ff',
+      ink:         'rgb(155, 137, 98)',
       bgDark:      '#7A9878',
+    },
+    fonts: {
+      title:    "'PyeongtaekSunset', serif",
+      subtitle: "'PyeongtaekSunset', serif",
+      body:     "'OngleipEunbyeol', sans-serif",
     },
     assets: {
       webBg:           './assets/theme2/web_intro_bg.png',
@@ -96,8 +103,8 @@ export const THEMES = [
     },
     ui: {
       bgDark:           '#7A9878',
-      mobBgShell:       '#ECD8DC', 
-      mobBgIntro:       '#F2E0E6', 
+      mobBgShell:       '#ECD8DC',
+      mobBgIntro:       '#F2E0E6',
       mobBgBookWrap:    '#D4E0CC',
       mobBgGoto:        '#D4788A',
       mobBgGotoHover:   'rgba(184,90,112,0.98)',
@@ -111,10 +118,8 @@ export const THEMES = [
       tabBg:            'rgba(244,238,216,0.97)',
       tabBgHover:       'rgba(250,244,224,1)',
       tabBgActive:      'rgba(255,250,232,1)',
-      tabBorder:        'rgba(212,184,122,0.45)', 
+      tabBorder:        'rgba(212,184,122,0.45)',
       tabBorderActive:  'rgba(192,212,176,0.75)',
-      tabColor:         '#7A5A60',  
-      tabColorActive:   '#B85A70',  
       mobNavBg:         'rgba(184,100,120,0.95)',
       mobNavBorder:     'rgba(192,212,176,0.5)',
       mobNavColor:      '#FFF4EC',
@@ -124,8 +129,7 @@ export const THEMES = [
       hintBorder:       'rgba(232, 96, 128, 0.65)',
       hintShadow:       'rgba(232, 96, 128, 0.35)',
       hintTextShadow:   'rgba(255, 130, 160, 0.9)',
-      logoShadow:       'rgba(219, 193, 200, 0.35)',
-    }
+    },
   },
   {
     id: 'theme3',
@@ -133,13 +137,18 @@ export const THEMES = [
     colors: {
       gradientA:   '#d4bc7aff',
       gradientB:   '#ce0610ff',
-      crimson:     '#C8A030',
+      crimson:     '#5e554d',
       crimsonDark: '#A07820',
       gold:        '#C89828',
       goldLight:   '#E0BC60',
       parchment:   '#F5EDD8',
       ink:         '#1C1008',
       bgDark:      '#3C2C10',
+    },
+    fonts: {
+      title:    "'SfHambakneun', sans-serif",
+      subtitle: "'SfHambakneun', sans-serif",
+      body:     "'Shilla', serif",
     },
     assets: {
       webBg:           './assets/theme3/web_intro_bg.png',
@@ -161,7 +170,7 @@ export const THEMES = [
       mobBgShell:       '#E8DDB8',
       mobBgIntro:       '#F0E8C8',
       mobBgBookWrap:    '#D8C880',
-      mobBgGoto:        '#8C6830',
+      mobBgGoto:        '#4e382b',
       mobBgGotoHover:   'rgba(108,80,28,0.98)',
       btnBg:            'rgba(255, 249, 242, 0.92)',
       btnBgHover:       'rgba(236, 231, 221, 0.98)',
@@ -175,8 +184,6 @@ export const THEMES = [
       tabBgActive:      'rgba(255,250,232,1)',
       tabBorder:        'rgba(200,152,40,0.45)',
       tabBorderActive:  'rgba(200,36,28,0.50)',
-      tabColor:         '#6B4A1A',
-      tabColorActive:   '#C8241C',
       mobNavBg:         'rgba(200,160,48,0.97)',
       mobNavBorder:     'rgba(200,36,28,0.35)',
       mobNavColor:      '#2C1A04',
@@ -186,8 +193,7 @@ export const THEMES = [
       hintBorder:       'rgba(255, 8, 8, 0.65)',
       hintShadow:       'rgba(168, 150, 100, 0.35)',
       hintTextShadow:   'rgba(224,188,96,0.9)',
-      logoShadow:       'rgba(255, 255, 255, 0.45)',
-    }
+    },
   },
 ]
 
@@ -196,9 +202,11 @@ const applyTheme = (theme) => {
   const c = theme.colors
   const a = theme.assets
   const u = theme.ui
+  const f = theme.fonts
 
-  //CSS 컬러
   const root = document.documentElement
+
+  // 색상 변수
   root.style.setProperty('--crimson',      c.crimson)
   root.style.setProperty('--crimson-dark', c.crimsonDark)
   root.style.setProperty('--gold',         c.gold)
@@ -206,7 +214,7 @@ const applyTheme = (theme) => {
   root.style.setProperty('--parchment',    c.parchment)
   root.style.setProperty('--ink',          c.ink)
 
-  //
+  // UI 변수
   root.style.setProperty('--bg-dark',           u.bgDark)
   root.style.setProperty('--mob-bg-shell',      u.mobBgShell)
   root.style.setProperty('--mob-bg-intro',      u.mobBgIntro)
@@ -225,8 +233,6 @@ const applyTheme = (theme) => {
   root.style.setProperty('--tab-bg-active',     u.tabBgActive)
   root.style.setProperty('--tab-border',        u.tabBorder)
   root.style.setProperty('--tab-border-active', u.tabBorderActive)
-  root.style.setProperty('--tab-color',         u.tabColor)
-  root.style.setProperty('--tab-color-active',  u.tabColorActive)
   root.style.setProperty('--mob-nav-bg',        u.mobNavBg)
   root.style.setProperty('--mob-nav-border',    u.mobNavBorder)
   root.style.setProperty('--mob-nav-color',     u.mobNavColor)
@@ -236,7 +242,11 @@ const applyTheme = (theme) => {
   root.style.setProperty('--hint-border',       u.hintBorder)
   root.style.setProperty('--hint-shadow',       u.hintShadow)
   root.style.setProperty('--hint-text-shadow',  u.hintTextShadow)
-  root.style.setProperty('--logo-shadow',       u.logoShadow)
+
+  // 폰트 변수
+  root.style.setProperty('--font-title',    f.title)
+  root.style.setProperty('--font-subtitle', f.subtitle)
+  root.style.setProperty('--font-body',     f.body)
 
   // 이미지 + 커서
   let style = document.getElementById('__theme-override__')
@@ -256,7 +266,7 @@ const applyTheme = (theme) => {
     .port-inner            { background-image: url('${a.innerMobile}') !important; }
     .mob-page::before      { background-image: url('${a.innerMobile}') !important; }
     .mob-header            { background-image: url('${a.mobileHeader}') !important; }
-    .mob-logo              { filter: drop-shadow(0 1px 4px ${u.logoShadow}) !important; }
+    .mob-logo              { filter: drop-shadow(0 1px 4px rgba(0,0,0,0.45)) !important; }
   `
 }
 

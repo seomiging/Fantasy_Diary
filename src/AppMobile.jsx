@@ -16,6 +16,8 @@ const MOBILE_PAGES = [
   { path: '/profile', pageNum: 2, page: 2 },
   { path: '/diary',   pageNum: 1, page: 3 },
   { path: '/diary',   pageNum: 2, page: 4 },
+  { path: '/diary2',  pageNum: 3, page: 5 },
+  { path: '/diary2',  pageNum: 4, page: 6 },
 ]
 
 const AppMobile = ({ isMobilePhone }) => {
@@ -134,10 +136,11 @@ const AppMobile = ({ isMobilePhone }) => {
     if (!p) return null
     if (p.path === '/profile') return <Profile pageNum={p.pageNum} />
     if (p.path === '/diary')   return <Diary   pageNum={p.pageNum} />
+    if (p.path === '/diary2')  return <Diary   pageNum={p.pageNum} />
     return null
   }
 
-  // ── 태블릿 portrait ──
+  // 태블릿 portrait
   if (!isMobilePhone) {
     if (isHome) {
       return (
@@ -177,7 +180,7 @@ const AppMobile = ({ isMobilePhone }) => {
     )
   }
 
-  // ── 스마트폰: 표지 ──
+  // 스마트폰: 표지
   if (isHome) {
     return (
       <div className={`mob-intro${coverLeaving ? ' mob-intro-leave' : ''}`} onClick={tapStart}>
@@ -190,7 +193,7 @@ const AppMobile = ({ isMobilePhone }) => {
     )
   }
 
-  // ── 스마트폰: 콘텐츠 ──
+  // 스마트폰: 콘텐츠
   return (
     <div className="mob-shell">
       <header className="mob-header">

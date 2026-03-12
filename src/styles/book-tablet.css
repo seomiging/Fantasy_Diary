@@ -33,7 +33,7 @@
     height: 100%;
     object-fit: fill;
   }
-  .book-closed .click-hint { left: 54%; font-size: 11px; bottom: 7%; }
+  .book-closed .click-hint { left: 54%; font-size: 11px; bottom: 11%; }
   .book-closed.book-opening {
     animation: bookOpenTablet 0.6s cubic-bezier(0.4,0,0.2,1) forwards;
   }
@@ -183,7 +183,7 @@
   .book-portrait .nav-item {
     flex: 1;
     width: 36px;
-    font-family: 'NexonWarhaven', serif;
+    font-family: var(--font-title);
     font-size: clamp(8px, 1.2vw, 11px);
     font-weight: 600;
     letter-spacing: 0.08em;
