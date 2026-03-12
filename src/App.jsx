@@ -40,7 +40,7 @@ const DiaryShell = ({ children }) => {
   const isHome    = location.pathname === '/'
   const pageIndex = PAGES.indexOf(location.pathname)
 
-  // ── 흰색 커서 동그라미 (잉크펜 끝 표시) ──
+  //  흰색 커서 동그라미 (잉크펜 끝 표시) 
   useEffect(() => {
     const dot = document.createElement('div')
     dot.id = 'cursor-dot'
@@ -73,7 +73,7 @@ const DiaryShell = ({ children }) => {
     }
   }, [])
 
-  // ── 반응형 감지 + scale 계산 ──
+  //  반응형 감지 + scale 계산 
   // 웹/가로 기준: book-open(1300x800) + 좌우버튼(68*2) + 여백
   const BASE_W = 1436
   const BASE_H = 946
@@ -134,7 +134,7 @@ const DiaryShell = ({ children }) => {
     }, 320)
   }, [navigate])
 
-  // ── 마우스 휠로 페이지 이동 ──
+  //  마우스 휠로 페이지 이동 
   const scrollAccum = useRef(0)
   const lastScroll  = useRef(0)
   const handleWheel = useCallback((e) => {

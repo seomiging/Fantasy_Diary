@@ -7,7 +7,7 @@ const ThemeSelector = ({ isMobilePhone }) =>
 
 export default ThemeSelector
 
-/* ── 웹 / 태블릿: 가로 패널 ── */
+/* 웹 / 태블릿: 가로 */
 const ThemeSelectorWeb = () => {
   const { currentTheme, isOpen, toggleOpen, selectTheme } = useTheme()
   return (
@@ -38,7 +38,7 @@ const ThemeSelectorWeb = () => {
   )
 }
 
-/* ── 모바일: 세로 패널 (오른쪽) ── */
+/* 모바일: 오른쪽 세로 */
 const ThemeSelectorMobile = () => {
   const { currentTheme, isOpen, toggleOpen, selectTheme } = useTheme()
   return (

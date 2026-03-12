@@ -1,8 +1,6 @@
-/* ════════════════════════════════════════
-   layout.css  ·  배경 & 공통 레이아웃
-════════════════════════════════════════ */
+/* 배경 & 공통 */
 
-/* ── 전체 배경 ── */
+/* 전체 배경 */
 .diary-bg {
   position: relative;
   width: 100vw;
@@ -18,7 +16,7 @@
 .diary-bg.bg-home    { background-image: url('/assets/theme1/web_intro_bg.png'); }
 .diary-bg.bg-content { background-image: url('/assets/theme1/web_content_bg.png'); }
 
-/* ── 책 컨테이너 ── */
+/* 책 컨테이너 */
 .book-container {
   position: relative;
   display: flex;
@@ -27,7 +25,7 @@
   overflow: visible;
 }
 
-/* ── 페이지 번호 (공통) ── */
+/* 페이지 번호 (공통) */
 .page-number {
   font-family: 'Ridibatang', serif;
   font-size: 16px;
@@ -37,7 +35,7 @@
   white-space: nowrap;
 }
 
-/* ── 사파리 dvh 보정 ── */
+/* 사파리 dvh 보정 */
 @supports (height: 100dvh) {
   .diary-bg { height: 100dvh; }
 }

@@ -1,7 +1,4 @@
-/* ════════════════════════════════════════
-   app.css  ·  스타일 진입점
-   순서 중요: variables → fonts → animations → layout → 각 UI
-════════════════════════════════════════ */
+/* 스타일 진입점 순서 중요: variables → fonts → animations → layout → 각 UI */
 @import './styles/variables.css';
 @import './styles/fonts.css';
 @import './styles/animations.css';

@@ -1,8 +1,6 @@
-/* ════════════════════════════════════════
-   book-web.css  ·  웹 / 가로 레이아웃 전용
-════════════════════════════════════════ */
+/* book-web.css  ·  웹 / 가로 모드 */
 
-/* ── 닫힌 표지 ── */
+/* 닫힌 표지 */
 .book-closed {
   width: 650px;
   height: 800px;
@@ -25,7 +23,7 @@
 }
 .book-closed .click-hint {
   position: absolute;
-  bottom: 8%;
+  bottom: 13%;
   left: 56%;
   transform: translateX(-50%);
   font-family: 'NexonWarhaven', serif;
@@ -38,7 +36,7 @@
   text-shadow: 0 0 8px var(--hint-text-shadow), 0 0 20px var(--hint-shadow);
 }
 
-/* ── 펼쳐진 책 ── */
+/* 펼쳐진 책 */
 .book-open {
   display: flex;
   width: 1300px;
@@ -60,7 +58,7 @@
 .book-open.book-opened  { animation: bookSpread 0.55s cubic-bezier(0.22,1,0.36,1) 0.1s forwards; }
 .book-open.book-closing { animation: bookClose  0.45s cubic-bezier(0.4,0,0.8,0.2) forwards; }
 
-/* ── 왼쪽 페이지 ── */
+/* 왼쪽 페이지 */
 .page-left {
   width: 50%;
   height: 100%;
@@ -78,13 +76,13 @@
 }
 .page-left .page-number {
   position: absolute;
-  bottom: 22px;
+  bottom: 45px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 2;
 }
 
-/* ── 오른쪽 페이지 ── */
+/* 오른쪽 페이지 */
 .page-right {
   width: 50%;
   height: 100%;
@@ -103,13 +101,13 @@
 }
 .page-right .page-number {
   position: absolute;
-  bottom: 22px;
+  bottom: 45px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 3;
 }
 
-/* ── 페이지 콘텐츠 ── */
+/* 페이지 콘텐츠 */
 .page-content {
   position: absolute;
   inset: 0;
@@ -123,7 +121,7 @@
 .page-content::-webkit-scrollbar { width: 6px; }
 .page-content::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 3px; }
 
-/* ── 인덱스 탭 (웹) ── */
+/* 인덱스 탭 (웹) */
 .page-right .diary-nav {
   position: absolute;
   top: calc(-1 * var(--nav-h));
@@ -140,7 +138,7 @@
   font-family: 'NexonWarhaven', serif;
   font-size: 13px;
   font-weight: 600;
-  color: var(--ink);
+  color: var(--tab-color);
   letter-spacing: 0.1em;
   text-decoration: none;
   flex: 1;
@@ -155,9 +153,9 @@
   box-shadow: 0 -2px 8px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.6);
   transition: all 0.18s;
 }
-.nav-item:hover { color: var(--crimson-dark); background: var(--tab-bg-hover); }
+.nav-item:hover { color: var(--tab-color-active); background: var(--tab-bg-hover); }
 .nav-item.active {
-  color: var(--crimson-dark);
+  color: var(--tab-color-active);
   background: var(--tab-bg-active);
   border-color: var(--tab-border-active);
   font-weight: 700;
@@ -165,7 +163,7 @@
   box-shadow: 0 -3px 14px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.8);
 }
 
-/* ── 페이지 넘기기 클래스 ── */
+/* 페이지 넘기기 클래스 */
 .page-inner-right.flip-exit-right {
   animation: exitRight 0.32s cubic-bezier(0.4,0,1,0.6) forwards;
   transform-origin: left center;
@@ -187,14 +185,14 @@
   z-index: 4;
 }
 
-/* ── 이전/다음 버튼 ── */
+/* 이전/다음 버튼 */
 .nav-btn {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
   background: none;
   border: none;
-  color: var(--gold-light);
+  color: #ffffff;
   font-size: 36px;
   width: 56px;
   height: 56px;
@@ -210,7 +208,7 @@
 .nav-btn.prev  { left: -68px; }
 .nav-btn.next  { right: -68px; }
 
-/* ── X 닫기 버튼 ── */
+/* X 닫기 버튼 */
 .close-btn {
   position: absolute;
   top: -38px;
@@ -219,7 +217,7 @@
   height: 34px;
   background: var(--btn-bg);
   border: 1px solid var(--btn-border);
-  color: var(--gold-light);
+  color: var(--btn-color);
   font-size: 16px;
   display: flex;
   align-items: center;
@@ -232,13 +230,13 @@
 }
 .close-btn:hover {
   background: var(--btn-bg-hover);
-  color: #fff;
+  color: var(--btn-color-hover);
   transform: scale(1.18);
   box-shadow: 0 0 14px var(--btn-shadow), 0 0 28px var(--btn-shadow2);
-  border-color: var(--gold-light);
+  border-color: var(--btn-border);
 }
 
-/* ── 처음으로 버튼 ── */
+/* 처음으로 버튼 */
 .home-return-btn {
   position: absolute;
   bottom: -64px;
@@ -246,7 +244,7 @@
   transform: translateX(-50%);
   background: var(--btn-bg);
   border: 1px solid var(--btn-border);
-  color: var(--gold-light);
+  color: var(--btn-color);
   font-family: 'NexonWarhaven', serif;
   font-size: 14px;
   letter-spacing: 0.2em;
@@ -259,14 +257,14 @@
 }
 .home-return-btn:hover {
   background: var(--btn-bg-hover);
-  color: #fff;
+  color: var(--btn-color-hover);
   transform: translateX(-50%) translateY(-3px);
   box-shadow: 0 0 16px var(--btn-shadow), 0 6px 24px rgba(0,0,0,0.6);
-  border-color: var(--gold-light);
+  border-color: var(--btn-border);
   letter-spacing: 0.28em;
 }
 
-/* ── 가로 모드 강제 표시 ── */
+/* 가로 모드 강제 표시 */
 @media (max-width: 1024px) and (orientation: landscape) {
   .book-open:not(.book-portrait) { display: flex !important; }
   .book-portrait { display: none !important; }

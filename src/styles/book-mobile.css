@@ -1,11 +1,8 @@
-/* ════════════════════════════════════════
-   book-mobile.css  ·  스마트폰 전용
-   (≤480px, orientation: portrait)
-════════════════════════════════════════ */
+/* 스마트폰 480px */
 
 @media (max-width: 480px) and (orientation: portrait) {
 
-  /* ── 배경 & 컨테이너 ── */
+  /* 배경 & 컨테이너 */
   .diary-bg.bg-phone {
     align-items: stretch;
     justify-content: stretch;
@@ -21,7 +18,7 @@
     position: relative;
   }
 
-  /* ── 표지 화면 ── */
+  /* 표지 화면 */
   .mob-intro {
     width: 100vw;
     height: 100vh;
@@ -63,7 +60,7 @@
     box-shadow: 0 0 16px var(--hint-shadow);
   }
 
-  /* ── 앱 쉘 ── */
+  /* 앱 쉘 */
   .mob-shell {
     width: 100vw;
     height: 100vh;
@@ -73,7 +70,7 @@
     background: var(--mob-bg-shell);
   }
 
-  /* ── 헤더 ── */
+  /* 헤더 */
   .mob-header {
     width: 100%;
     height: 56px;
@@ -93,7 +90,7 @@
     filter: drop-shadow(0 1px 4px rgba(0,0,0,0.5));
   }
 
-  /* ── 네비게이션 ── */
+  /* 네비게이션 */
   .mob-nav {
     width: 100%;
     height: 34px;
@@ -137,7 +134,7 @@
     border-radius: 2px 2px 0 0;
   }
 
-  /* ── 책 영역 ── */
+  /* 책 영역 */
   .mob-book-wrap {
     flex: 1;
     min-height: 0;
@@ -151,7 +148,7 @@
     background: var(--mob-bg-book-wrap);
   }
 
-  /* ── 화살표 버튼 ── */
+  /* 화살표 버튼 */
   .mob-arrow {
     background: none;
     border: none;
@@ -169,7 +166,7 @@
   }
   .mob-arrow:hover { color: #fff; }
 
-  /* ── 돌아가기 버튼 ── */
+  /* 돌아가기 버튼 */
   .mob-goto-btn {
     width: 100%;
     height: 36px;
@@ -196,7 +193,7 @@
     box-shadow: 0 0 12px var(--hint-shadow);
   }
 
-  /* ── 다이어리 페이지 ── */
+  /* 다이어리 페이지 */
   .mob-page {
     position: relative;
     flex: 1;
@@ -217,7 +214,7 @@
     border-radius: 6px;
   }
 
-  /* ── 페이지 콘텐츠 ── */
+  /* 페이지 콘텐츠 */
   .mob-page-content {
     position: absolute;
     inset: 0;
@@ -234,10 +231,10 @@
   .mob-page .port-click-zone-top,
   .mob-page .port-click-zone { display: none; }
 
-  /* ── 페이지 번호 ── */
+  /* 페이지 번호 */
   .mob-page-number {
     position: absolute;
-    bottom: 10px;
+    bottom: 22px;
     left: 50%;
     transform: translateX(-50%);
     font-family: 'Ridibatang', serif;
@@ -248,7 +245,7 @@
     pointer-events: none;
   }
 
-  /* ── 사파리 dvh 보정 ── */
+  /* 사파리 dvh 보정 */
   @supports (height: 100dvh) {
     .book-container-phone { height: 100dvh !important; }
     .mob-intro            { height: 100dvh; }

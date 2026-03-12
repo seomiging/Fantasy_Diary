@@ -1,15 +1,12 @@
-/* ════════════════════════════════════════
-   animations.css  ·  @keyframes 전용
-   애니메이션 타이밍/동작 수정은 여기서!
-════════════════════════════════════════ */
+/* animations.css  ·  @keyframes 전용 */
 
-/* ── 공통 ── */
+/* 공통 */
 @keyframes blink-glow {
   0%, 100% { opacity: 1;   text-shadow: 0 0 8px rgba(232,201,122,0.9), 0 0 20px rgba(201,168,76,0.5); }
   50%       { opacity: 0.2; text-shadow: none; }
 }
 
-/* ── 웹: 책 펼치기 / 닫기 ── */
+/* 웹-책 펼치기 / 닫기 */
 @keyframes bookOpen {
   0%   { transform: rotateY(0deg)   translateY(0);     opacity: 1; }
   60%  { transform: rotateY(-40deg) translateY(-10px); opacity: 0.8; }
@@ -24,7 +21,7 @@
   to   { opacity: 0; transform: scaleX(0.6) translateY(20px); }
 }
 
-/* ── 태블릿: 책 펼치기 / 닫기 ── */
+/* 태블릿-책 펼치기 / 닫기 */
 @keyframes bookOpenTablet {
   0%   { transform: perspective(600px) rotateX(0deg);  opacity: 1; }
   40%  { transform: perspective(600px) rotateX(20deg); opacity: 0.9; }
@@ -39,7 +36,7 @@
   to   { opacity: 0; transform: scaleY(0.85) translateY(-8px); }
 }
 
-/* ── 웹: 페이지 넘기기 ── */
+/* 웹-페이지 넘기기 */
 @keyframes exitRight {
   0%   { transform: scaleX(1);     filter: brightness(1); }
   100% { transform: scaleX(0);     filter: brightness(0.6); }
@@ -59,7 +56,7 @@
   100% { transform: scaleX(1);     filter: brightness(1); }
 }
 
-/* ── 태블릿/모바일: 속지 페이지 넘기기 ── */
+/* 태블릿/모바일-속지 페이지 넘기기 */
 @keyframes portExitDown {
   0%   { transform: translateY(0);     opacity: 1; }
   100% { transform: translateY(-100%); opacity: 0.3; }
@@ -77,7 +74,7 @@
   100% { transform: translateY(0);     opacity: 1; }
 }
 
-/* ── 모바일: 표지 나가기 ── */
+/* 모바일-표지 나가기 */
 @keyframes mobIntroLeave {
   0%   { transform: translateY(0);     opacity: 1; }
   100% { transform: translateY(-100%); opacity: 0; }

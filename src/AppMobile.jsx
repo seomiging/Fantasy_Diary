@@ -27,7 +27,7 @@ const AppMobile = ({ children, isMobilePhone }) => {
 
   const { currentTheme } = useTheme()
   const busy       = useRef(false)
-  const stepRef    = useRef(0)       // wheel 핸들러용 최신 step
+  const stepRef    = useRef(0)
   const lastScroll = useRef(0)
 
   // stepRef를 step과 동기화
@@ -131,7 +131,7 @@ const AppMobile = ({ children, isMobilePhone }) => {
 
   const bookCls = closing ? ' book-closing' : isOpen ? ' book-opened' : ''
 
-  // ── 태블릿 portrait ──
+  // 태블릿 portrait
   if (!isMobilePhone) {
     if (isHome) {
       return (
@@ -173,7 +173,7 @@ const AppMobile = ({ children, isMobilePhone }) => {
     )
   }
 
-  // ── 스마트폰: 표지 ──
+  // 스마트폰: 표지
   if (isHome) {
     return (
       <div className={`mob-intro${coverLeaving ? ' mob-intro-leave' : ''}`} onClick={tapStart}>
@@ -186,7 +186,7 @@ const AppMobile = ({ children, isMobilePhone }) => {
     )
   }
 
-  // ── 스마트폰: 콘텐츠 ──
+  // 스마트폰: 콘텐츠
   return (
     <div className="mob-shell">
 

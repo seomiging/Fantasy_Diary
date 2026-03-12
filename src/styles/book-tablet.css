@@ -1,6 +1,4 @@
-/* ════════════════════════════════════════
-   book-tablet.css  ·  태블릿 세로 전용
-════════════════════════════════════════ */
+/* 태블릿 세로 */
 
 .book-portrait { display: none !important; }
 
@@ -18,7 +16,7 @@
 
   .book-open:not(.book-portrait) { display: none !important; }
 
-  /* ── 표지 ── */
+  /* 표지 */
   .book-closed {
     width: 400px;
     height: 540px;
@@ -32,12 +30,12 @@
     height: 100%;
     object-fit: fill;
   }
-  .book-closed .click-hint { left: 54%; font-size: 11px; bottom: 7%; }
+  .book-closed .click-hint { left: 54%; font-size: 11px; bottom: 13%; }
   .book-closed.book-opening {
     animation: bookOpenTablet 0.6s cubic-bezier(0.4,0,0.2,1) forwards;
   }
 
-  /* ── 세로 다이어리 ── */
+  /* 세로 다이어리 */
   .book-portrait {
     display: flex !important;
     flex-direction: column;
@@ -60,7 +58,7 @@
     pointer-events: none;
   }
 
-  /* ── 속지 ── */
+  /* 속지 */
   .port-page {
     position: absolute;
     inset: 10px 4px 10px 4px;
@@ -99,27 +97,27 @@
   }
   .port-page .page-number {
     position: absolute;
-    bottom: 12px;
+    bottom: 26px;
     left: 50%;
     transform: translateX(-50%);
     z-index: 4;
     font-size: 13px;
   }
 
-  /* ── 속지 넘기기 ── */
+  /* 속지 넘기기 */
   .port-inner.port-exit-down  { animation: portExitDown  0.3s  ease-in  forwards; z-index: 2; }
   .port-inner.port-enter-up   { animation: portEnterUp   0.35s ease-out forwards; z-index: 1; }
   .port-inner.port-exit-up    { animation: portExitUp    0.3s  ease-in  forwards; z-index: 2; }
   .port-inner.port-enter-down { animation: portEnterDown 0.35s ease-out forwards; z-index: 1; }
 
-  /* ── 위아래 버튼 ── */
+  /* 위아래 버튼 */
   .book-portrait .nav-btn {
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
     background: none;
     border: none;
-    color: var(--gold-light);
+    color: #ffffff;
     font-size: 36px;
     width: 56px;
     height: 56px;
@@ -136,7 +134,7 @@
   .book-portrait .nav-btn.prev:hover,
   .book-portrait .nav-btn.next:hover { color: #fff; transform: translateX(-50%) scale(1.15); }
 
-  /* ── X 버튼 ── */
+  /* X 버튼 */
   .book-portrait .close-btn {
     top: -36px;
     right: -25px;
@@ -149,7 +147,7 @@
     box-shadow: 0 0 14px var(--btn-shadow), 0 0 28px var(--btn-shadow2);
   }
 
-  /* ── 처음으로 버튼 ── */
+  /* 처음으로 버튼 */
   .book-portrait .home-return-btn {
     bottom: -54px;
     font-size: 11px;
@@ -162,7 +160,7 @@
     letter-spacing: 0.15em;
   }
 
-  /* ── 인덱스 탭 ── */
+  /* 인덱스 탭 */
   .book-portrait .diary-nav {
     position: absolute;
     top: 0; bottom: 0;
@@ -187,7 +185,7 @@
     border: 1px solid var(--tab-border);
     border-left: none;
     background: var(--tab-bg);
-    color: var(--ink);
+    color: var(--tab-color);
     text-decoration: none;
     display: flex;
     align-items: center;
@@ -198,9 +196,9 @@
     writing-mode: vertical-rl;
     text-orientation: mixed;
   }
-  .book-portrait .nav-item:hover { color: var(--crimson-dark); background: var(--tab-bg-hover); }
+  .book-portrait .nav-item:hover { color: var(--tab-color-active); background: var(--tab-bg-hover); }
   .book-portrait .nav-item.active {
-    color: var(--crimson-dark);
+    color: var(--tab-color-active);
     font-weight: 700;
     background: var(--tab-bg-active);
     border-color: var(--tab-border-active);
