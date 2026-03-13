@@ -33,8 +33,8 @@ const DiaryShell = ({ spreadIdx }) => {
   const [isMobilePhone, setIsMobilePhone] = useState(false)
   const [scale,         setScale]         = useState(1)
   // 웹 페이지 넘김 애니메이션 상태
-  const [flipDir,       setFlipDir]       = useState(null) // 'next' | 'prev' | null
-  const [flipPhase,     setFlipPhase]     = useState(null) // 'exit' | 'enter' | null
+  const [flipDir,       setFlipDir]       = useState(null) 
+  const [flipPhase,     setFlipPhase]     = useState(null) 
   const { currentTheme } = useTheme()
   const busy = useRef(false)
 
@@ -134,10 +134,8 @@ const DiaryShell = ({ spreadIdx }) => {
   const pageNumLeft  = spreadIdx > 0 ? spreadIdx * 2 - 1 : ''
   const pageNumRight = spreadIdx > 0 ? spreadIdx * 2     : ''
 
-  // flip 클래스 계산
-  // 책 넘김 원리:
-  // next(뒤로, ❯): 오른쪽 페이지가 왼쪽으로 넘어감 → exit-right → enter-left
-  // prev(앞으로, ❮): 왼쪽 페이지가 오른쪽으로 넘어감 → exit-left → enter-right
+
+  // 웹 책 넘김
   const leftFlipCls = flipPhase === 'exit'
     ? (flipDir === 'prev' ? ' flip-exit-left'   : '')
     : flipPhase === 'enter'
@@ -216,7 +214,7 @@ const DiaryShell = ({ spreadIdx }) => {
               <button className="nav-btn next" onClick={() => goTo(spreadIdx + 1)}>❯</button>
             )}
             {spreadIdx === SPREAD_PATHS.length - 1 && (
-              <button className="home-return-btn" onClick={() => goTo(1)}>↩ 처음으로</button>
+              <button className="home-return-btn" onClick={() => goTo(2)}>처음으로</button>
             )}
           </div>
         )}

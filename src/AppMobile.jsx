@@ -55,23 +55,6 @@ const AppMobile = ({ isMobilePhone }) => {
     }, 400)
   }, [closing, navigate])
 
-  // 첫 페이지로 돌아가기
-  const goFirstPage = useCallback(() => {
-    if (closing || busy.current) return
-    setClosing(true)
-    setTimeout(() => {
-      setClosing(false)
-      setIsOpen(false)
-      setTimeout(() => {
-        setStep(0)
-        navigate('/profile')
-        requestAnimationFrame(() => {
-          requestAnimationFrame(() => { setIsOpen(true) })
-        })
-      }, 50)
-    }, 400)
-  }, [closing, navigate])
-
   // 표지 탭 → 콘텐츠 진입
   const tapStart = useCallback(() => {
     setCoverLeaving(true)
@@ -102,6 +85,13 @@ const AppMobile = ({ isMobilePhone }) => {
   const clickPrev = useCallback(() => {
     if (stepRef.current > 0) goStep(stepRef.current - 1, 'prev')
   }, [goStep])
+
+  // 일기 첫 페이지로 이동
+  const goDiary = useCallback(() => {
+    if (closing || busy.current) return
+    const diaryIdx = MOBILE_PAGES.findIndex(p => p.path === '/diary')
+    if (diaryIdx >= 0) goStep(diaryIdx, diaryIdx > stepRef.current ? 'next' : 'prev')
+  }, [closing, goStep])
 
   // 휠 이벤트
   useEffect(() => {
@@ -175,7 +165,7 @@ const AppMobile = ({ isMobilePhone }) => {
         <button className="close-btn" onClick={goHome} title="홈으로">✕</button>
         {!isFirstPage && <button className="nav-btn prev" onClick={clickPrev}>︿</button>}
         {!isLastPage  && <button className="nav-btn next" onClick={clickNext}>﹀</button>}
-        {isLastPage   && <button className="home-return-btn" onClick={goHome}>↩ 처음으로</button>}
+        {isLastPage   && <button className="home-return-btn" onClick={goDiary}>처음으로</button>}
       </div>
     )
   }
@@ -228,7 +218,7 @@ const AppMobile = ({ isMobilePhone }) => {
         </div>
 
         {isLastPage ? (
-          <button className="mob-goto-btn" onClick={goFirstPage}>첫 페이지로 돌아가기</button>
+          <button className="mob-goto-btn" onClick={goDiary}>첫 페이지로 돌아가기</button>
         ) : (
           <button className="mob-arrow mob-arrow-next" onClick={clickNext}>﹀</button>
         )}
